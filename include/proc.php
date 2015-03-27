@@ -2,6 +2,26 @@
 
  define("cSiteRGM","<a href='https://projetorgm.com.br/'><img class='alinhar-vertical' src='imagens/favicon.png' width='32px' /> projetorgm.com.br</a>");
 
+function IsValidLayer($Test){
+	$IsLayer = FALSE;
+	$Test = $Test . ",";
+	$Layers = "mapnik,OSMbw,outdoors,cycle,ESRI,IBGEr,IBGEu,MapBox,StamenWater,StamenToner,StamenTonerL,";
+	if( StrPosicao($Test,$Layers) > 0 ) {
+		$IsLayer = TRUE;
+	} 
+	return $IsLayer;
+}
+
+
+function IsValidOverlay($Test){
+	$IsLayer = FALSE;
+	$Test = $Test . ",";
+	$Layers = "Mapillary,";
+	if( StrPosicao($Test,$Layers) > 0 ) {
+		$IsLayer = TRUE;
+	} 
+	return $IsLayer;
+}
 
 
 function ItemDivNav($Texto) {
@@ -43,6 +63,7 @@ function GetIDURL($MinhaURL,$ID) {
 
 function ClearVars() {
 // 	 if( isset($_SESSION['CalendarioTipoEscolhido']) ) { unset($_SESSION['CalendarioTipoEscolhido']); }
+ 	 if( isset($_SESSION['CustomLayer']) ) { unset($_SESSION['CustomLayer']); }
 }
 
 

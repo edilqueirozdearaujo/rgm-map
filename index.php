@@ -38,7 +38,6 @@ include_once "include/proc.php";
 
 	$IsMobileBrowser = IsMobileBrowser();
 
-	//Se não tiver configurado país, linguagem e tipo de calendário, configura e redireciona 
 	// (geralmente, a primeira visita ao site)
 	if( !isset($_SESSION['Lang']) || !isset($_SESSION['Country'])) {
 	   $_SESSION['Lang']    = "pt";
@@ -55,18 +54,25 @@ include_once "include/proc.php";
 	 ClearVars(); 	 
  	 RedirecionarPHP($MinhaURL);
  }
-/* elseif (filter_has_var(INPUT_POST,'country')) {
-		$Pais = filter_input(INPUT_POST,'country',FILTER_SANITIZE_STRING);
-		$Country = CountryFilter($Pais);
-		$Lang    = CountryToLanguage($Country);		
-	   $_SESSION['Lang']    = $Lang;
-	   $_SESSION['Country'] = $Country; 
-		RedirecionarPHP($MinhaURL);
+/* elseif (...) {
  }*/
- elseif (filter_has_var(INPUT_GET,'id')) {
- 	   //Prevent first step
- 	   ClearVars(); 
- 	   
+ 
+ 
+ //Baselayer foi escolhida por URL?
+ if (filter_has_var(INPUT_GET,'layer')) {
+ 	   $SetBaseLayer = filter_input(INPUT_GET,'layer',FILTER_SANITIZE_STRING);
+ }
+ //Overlay foi escolhida por URL?
+ if (filter_has_var(INPUT_GET,'overlay')) {
+ 	   $SetOverlay = filter_input(INPUT_GET,'overlay',FILTER_SANITIZE_STRING);
+ }
+ //Overlayer customizada foi escolhida por URL?
+ if (filter_has_var(INPUT_GET,'ovlaycust')) {
+ 	   $TempCustomOverLay = filter_input(INPUT_GET,'ovlaycust',FILTER_SANITIZE_STRING);
+ 	   $ArrCustomOverLay = explode(",",$TempCustomOverLay);
+ 	   if( count($ArrCustomOverLay) == 2 ) {	//2 parâmetros... OK?
+ 	   	$CustomOverLay = $ArrCustomOverLay; 	   
+ 	   }
  }
 
 
@@ -115,6 +121,38 @@ include_once "include/proc.php";
 
 	
 	<script src='include/proc.js'></script>
+
+	<?
+		Linha("<script>");
+		//Layer foi especificada por URL?
+		if( isset($SetBaseLayer) ) {
+			if( IsValidLayer($SetBaseLayer) ) {
+					Linha("		//Layer padrão modificada por URL");
+				 	Linha("		map.removeLayer(layer_mapnik);"); 
+				 	Linha("		map.addLayer(layer_".$SetBaseLayer.");");
+			}
+		}
+
+		//Overlay foi especificada por URL?
+		Linha(" ");
+		if( isset($SetOverlay) ) {
+			if( IsValidOverlay($SetOverlay) ) {
+					Linha("		//Overlay adicionada por URL");
+				 	Linha("		map.addLayer(layer_".$SetOverlay.");");
+			}
+		}
+
+		//OverLayer foi especificada por URL?
+		Linha(" ");
+		if( isset($CustomOverLay) ) {
+					Linha("		//Layer personalizada");
+				 	Linha("		var layer_Custom        = L.mapbox.featureLayer('".$CustomOverLay[0]."');"); 
+				 	Linha("		ControlLayers.addOverlay(layer_Custom, '".$CustomOverLay[1]."');");
+				 	Linha("		map.addLayer(layer_Custom);");
+		}
+
+		Linha("	</script>");
+	?>	
 
 </body>
 </html>

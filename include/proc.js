@@ -101,7 +101,7 @@ ControlLayers.addOverlay(layer_oplTurismo, 'Turismo');
 ControlLayers.addOverlay(layer_oplTransporte, 'Transporte');				
 ControlLayers.addOverlay(layer_oplBasicos, 'Utilidades básicas');								
 ControlLayers.addOverlay(layer_oplNasc, 'Nascentes');								
-ControlLayers.addOverlay(layer_oplLixo, 'Onde jogar lixo?');
+//ControlLayers.addOverlay(layer_oplLixo, 'Onde jogar lixo?');
 
 ControlLayers.addTo(map);
 
