@@ -71,7 +71,7 @@ include_once "include/proc.php";
  	   $TempCustomOverLay = filter_input(INPUT_GET,'ovlaycust',FILTER_SANITIZE_STRING);
  	   $ArrCustomOverLay = explode(",",$TempCustomOverLay);
  	   if( count($ArrCustomOverLay) == 2 ) {	//2 parâmetros... OK?
- 	   	$CustomOverLay = $ArrCustomOverLay; 	   
+ 	   	$CustomOverLay = $ArrCustomOverLay; 	   	 	   
  	   }
  }
 

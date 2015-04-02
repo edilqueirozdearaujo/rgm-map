@@ -58,9 +58,9 @@ var BaseLayers = {
 };	
 
 var Overlays = {		
-    'Unidades de Conservação'  : layer_MMA,
-    'Fotos do Mapillary'       : layer_Mapillary,
-    'Microbacias Hidrográficas' : layer_Microbacias
+   // 'Unidades de Conservação'  : layer_MMA,
+   // 'Fotos do Mapillary'       : layer_Mapillary,
+   // 'Microbacias Hidrográficas' : layer_Microbacias
 };	
 
 var ControlLayers = L.control.layers( BaseLayers, Overlays, {position: 'topright', collapsed: true});
