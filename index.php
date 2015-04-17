@@ -109,8 +109,7 @@ include_once "include/proc.php";
 	<!-- Leaflet Layer OverPass plugin > https://github.com/kartenkarsten/leaflet-layer-overpass/ -->
 	<link rel="stylesheet" href="css/OverPassLayer.css" />
 	<script src="include/OverPassLayer.js"></script>	
-	
-		
+
 	<script src='include/leafletrout.js'></script>
 </head>
 <body>

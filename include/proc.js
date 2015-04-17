@@ -120,7 +120,12 @@ ControlGeocoder.addTo(map);
 var MapHash = L.hash(map);
 		
 //map.addControl(L.mapbox.shareControl());
-		
+
+var Escala = L.control.scale({
+	maxWidth: 140
+});				
+Escala.addTo(map);
+
 
 		map.on('overlayadd', function(e) {
 			 AttrIfLayerIsOn( layer_Mapillary, attrMapillary );		     
