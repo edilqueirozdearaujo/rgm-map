@@ -1,4 +1,4 @@
-var	MapboxAccessToken = "pk.eyJ1IjoiZWRpbHF1ZWlyb3pkZWFyYXVqbyIsImEiOiJ0dkRZNmRzIn0.3fPj6O145rJxSSA1yUuIjg";  //your-Mapbox-Access-Token  -> Learn more: https://www.mapbox.com/mapbox.js/
+var	MapboxAccessToken = "";  //your-Mapbox-Access-Token  -> Learn more: https://www.mapbox.com/mapbox.js/
 
 var Sep = ' | ';
 var attrOSM         = '<a href="http://www.openstreetmap.org/copyright" title="Termos e condições" >contribuidores do OpenStreetMap</a>'; 
@@ -26,11 +26,25 @@ var layer_StamenWater  = L.tileLayer('http://{s}.tile.stamen.com/watercolor/{z}/
 var layer_StamenToner  = L.tileLayer('http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.jpg', {attribution: attrStamen} ); 
 var layer_StamenTonerL = L.tileLayer('http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.jpg', {attribution: attrStamen} ); 
 
-L.mapbox.accessToken = MapboxAccessToken;
-var layer_MMA        = L.mapbox.featureLayer('edilqueirozdearaujo.l55cf7ad');
-var layer_Microbacias   = L.mapbox.featureLayer('edilqueirozdearaujo.l54c2k79');
-var layer_Mapillary = new L.mapbox.featureLayer();
+L.mapbox.accessToken   = MapboxAccessToken;
+var layer_MMA          = L.mapbox.featureLayer('edilqueirozdearaujo.l55cf7ad');
+var layer_Microbacias  = L.mapbox.featureLayer('edilqueirozdearaujo.l54c2k79');
 
+var layer_MapboxComic    = L.mapbox.tileLayer('projetorgm.lo6iii9m');
+var layer_MapboxStreets  = L.mapbox.tileLayer('projetorgm.lo6jai4e');
+var layer_MapboxLight    = L.mapbox.tileLayer('projetorgm.lo6kkpk8');
+var layer_MapboxDark     = L.mapbox.tileLayer('projetorgm.loj1elc9');
+var layer_MapboxOutdoors = L.mapbox.tileLayer('projetorgm.loj11cg8');
+var layer_MapboxPirates  = L.mapbox.tileLayer('projetorgm.loj254fd');
+var layer_MapboxWheatpaste  = L.mapbox.tileLayer('projetorgm.loj34g2c');
+var layer_MapboxBike     = L.mapbox.tileLayer('projetorgm.loj474lm');
+var layer_MapboxPencil   = L.mapbox.tileLayer('projetorgm.loj51j3n');
+
+
+
+
+
+var layer_Mapillary    = L.mapbox.featureLayer();
 	layer_Mapillary.on('layeradd', function(e) {
         e.layer.bindPopup('<img src="' + e.layer.feature.properties.image + '" />', {
             minWidth: 340

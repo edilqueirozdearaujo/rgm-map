@@ -48,11 +48,15 @@ layer_mapnik.addTo(map);
 
 var BaseLayers = {
     'OpenStreetMap': layer_mapnik,
-    'Toner': layer_StamenTonerL,
-    'Satélite Mapbox': layer_MapBox,
+    'Light'        : layer_MapboxLight,
+    'Dark'         : layer_MapboxDark,
+    'Ar livre'     : layer_MapboxOutdoors,  
+    'Poster Lambe-lambe'    : layer_MapboxWheatpaste,    
+    'Comic'        : layer_MapboxComic,
+    'Lápis'        : layer_MapboxPencil,
+    'Toner'        : layer_StamenTonerL,
+    'Satélite'     : layer_MapboxStreets,
     'Satélite ESRI': layer_ESRI,
-    'Ciclistas'    : layer_cycle,
-    'Ao ar livre': layer_outdoors,
     'IBGE Rural'   : layer_IBGEr,
     'IBGE Urbano'  : layer_IBGEu
 };	
