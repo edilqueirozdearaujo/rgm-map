@@ -2,6 +2,45 @@ var MapLegendTitle = "<div class='flutuar-direita map-title'><h3>Mapa do RGM</h3
 var map = L.mapbox.map('mapdiv');
 
 
+
+function ChangeLayer() {
+	var sel = document.getElementById('select-layer');
+	var Opcao = sel.options[sel.selectedIndex].value;		
+	
+	//Transforma string em layer
+	switch( Opcao ) {
+		case 'layer_mapnik'       : sLayer = layer_mapnik; break;	
+		case 'layer_OSMbw'        : sLayer = layer_OSMbw; break;	
+		case 'layer_MapboxLight'  : sLayer = layer_MapboxLight; break;
+		case 'layer_MapboxDark'   : sLayer = layer_MapboxDark; break;	
+		case 'layer_outdoors'     : sLayer = layer_outdoors; break;	
+		case 'layer_MapboxOutdoors'   : sLayer = layer_MapboxOutdoors; break;	
+		case 'layer_cycle'            : sLayer = layer_cycle; break;	
+		case 'layer_MapboxBike'       : sLayer = layer_MapboxBike; break;	
+		case 'layer_MapboxPencil' : sLayer = layer_MapboxPencil; break;	
+		case 'layer_MapboxComic' : sLayer = layer_MapboxComic; break;	
+		case 'layer_MapboxPirates' : sLayer = layer_MapboxPirates; break;	
+		case 'layer_StamenWater' : sLayer = layer_StamenWater; break;	
+		case 'layer_StamenTonerL' : sLayer = layer_StamenTonerL; break;	
+		case 'layer_StamenToner'  : sLayer = layer_StamenToner; break;	
+		case 'layer_MapboxWheatpaste' : sLayer = layer_MapboxWheatpaste; break;	
+		case 'layer_MapboxStreets': sLayer = layer_MapboxStreets; break;	
+		case 'layer_ESRI'         : sLayer = layer_ESRI; break;	
+		case 'layer_IBGEr'        : sLayer = layer_IBGEr; break;	
+		case 'layer_IBGEu'        : sLayer = layer_IBGEu; break;	
+	}	
+	
+	//Verifica existência da camada	
+    if (map.hasLayer(sLayer)) {
+            map.removeLayer(sLayer);
+            this.className = '';
+        } else {
+            map.addLayer(sLayer);
+            this.className = 'active';
+    }	
+}
+
+
 function LimparLegenda(Legenda) {
 	document.getElementById(Legenda).innerHTML = '';
 }
@@ -47,6 +86,8 @@ function AtualizarLegenda(Legenda) {
 layer_mapnik.addTo(map);  
 
 var BaseLayers = {
+//DEPRECATED
+/*
     'OpenStreetMap': layer_mapnik,
     'Light'        : layer_MapboxLight,
     'Dark'         : layer_MapboxDark,
@@ -59,11 +100,12 @@ var BaseLayers = {
     'Satélite ESRI': layer_ESRI,
     'IBGE Rural'   : layer_IBGEr,
     'IBGE Urbano'  : layer_IBGEu
+*/    
 };	
 
 var Overlays = {		
    // 'Unidades de Conservação'  : layer_MMA,
-   // 'Fotos do Mapillary'       : layer_Mapillary,
+   'Fotos do Mapillary'       : layer_Mapillary
    // 'Microbacias Hidrográficas' : layer_Microbacias
 };	
 

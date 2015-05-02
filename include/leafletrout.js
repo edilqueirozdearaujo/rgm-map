@@ -1,4 +1,4 @@
-var	MapboxAccessToken = "";  //your-Mapbox-Access-Token  -> Learn more: https://www.mapbox.com/mapbox.js/
+var	MapboxAccessToken = "pk.eyJ1IjoiZWRpbHF1ZWlyb3pkZWFyYXVqbyIsImEiOiJ0dkRZNmRzIn0.3fPj6O145rJxSSA1yUuIjg";  //your-Mapbox-Access-Token  -> Learn more: https://www.mapbox.com/mapbox.js/
 
 var Sep = ' | ';
 var attrOSM         = '<a href="http://www.openstreetmap.org/copyright" title="Termos e condições" >contribuidores do OpenStreetMap</a>'; 
@@ -46,8 +46,8 @@ var layer_MapboxPencil   = L.mapbox.tileLayer('projetorgm.loj51j3n');
 
 var layer_Mapillary    = L.mapbox.featureLayer();
 	layer_Mapillary.on('layeradd', function(e) {
-        e.layer.bindPopup('<img src="' + e.layer.feature.properties.image + '" />', {
-            minWidth: 340
+        e.layer.bindPopup('<img width="128px" src="' + e.layer.feature.properties.image + '" />', {
+            minWidth: 132
         });
     });
 

@@ -113,6 +113,29 @@ include_once "include/proc.php";
 	<script src='include/leafletrout.js'></script>
 </head>
 <body>
+	<div>Mapa:
+      <select id='select-layer' name='select-layer' onChange='ChangeLayer();' >  
+           <option value='layer_mapnik'            >OpenStreetMap</option>  
+           <option value='layer_OSMbw'             >OSM Tons de cinza</option>  
+           <option value='layer_MapboxLight'       >Light</option>  
+           <option value='layer_MapboxDark'        >Dark</option>
+           <option value='layer_outdoors'          >Ar livre</option>
+           <option value='layer_MapboxOutdoors'    >Ar livre Mapbox</option>
+           <option value='layer_cycle'             >Ciclistas</option>
+           <option value='layer_MapboxBike'        >Bike</option>
+           <option value='layer_MapboxPencil'       >Lápis</option>
+           <option value='layer_MapboxComic'       >Comic</option>
+           <option value='layer_MapboxPirates'       >Piratas</option>
+           <option value='layer_StamenWater'       >Aquarela</option>
+           <option value='layer_StamenTonerL'       >Toner Light</option>
+           <option value='layer_StamenToner'        >Toner Dark</option>
+           <option value='layer_MapboxWheatpaste'  >Poster Lambe-lambe</option>
+           <option value='layer_MapboxStreets'      >Satélite Mapbox</option>
+           <option value='layer_ESRI'               >Satélite ESRI</option>
+           <option value='layer_IBGEr'              >IBGE Rural</option>
+           <option value='layer_IBGEu'              >IBGE Urbano</option>
+      </select>
+	</div>
 	<div id='map-legend'></div>
 	<div id='geocode-selector'></div>
 	<div id='mapdiv'></div>
