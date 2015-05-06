@@ -1,4 +1,4 @@
-var	MapboxAccessToken = "pk.eyJ1IjoiZWRpbHF1ZWlyb3pkZWFyYXVqbyIsImEiOiJ0dkRZNmRzIn0.3fPj6O145rJxSSA1yUuIjg";  //your-Mapbox-Access-Token  -> Learn more: https://www.mapbox.com/mapbox.js/
+var	MapboxAccessToken = "";  //your-Mapbox-Access-Token  -> Learn more: https://www.mapbox.com/mapbox.js/
 
 var Sep = ' | ';
 var attrOSM         = '<a href="http://www.openstreetmap.org/copyright" title="Termos e condições" >contribuidores do OpenStreetMap</a>'; 

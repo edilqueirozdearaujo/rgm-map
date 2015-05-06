@@ -5,7 +5,10 @@
 function IsValidLayer($Test){
 	$IsLayer = FALSE;
 	$Test = $Test . ",";
-	$Layers = "mapnik,OSMbw,outdoors,cycle,ESRI,IBGEr,IBGEu,MapBox,StamenWater,StamenToner,StamenTonerL,";
+	$Layers = "mapnik,OSMbw,outdoors,cycle,ESRI,IBGEr,IBGEu,MapBox,StamenWater,StamenToner,StamenTonerL"
+			  . ",MapboxComic,MapboxStreets,MapboxLight,MapboxDark,MapboxOutdoors,MapboxPirates,MapboxWheatpaste,MapboxBike,MapboxPencil";
+	
+	//Novas layers aqui!!!!!!!!!!!!!!!! //
 	if( StrPosicao($Test,$Layers) > 0 ) {
 		$IsLayer = TRUE;
 	} 

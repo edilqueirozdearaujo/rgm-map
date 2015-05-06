@@ -1,11 +1,19 @@
-var MapLegendTitle = "<div class='flutuar-direita map-title'><h3>Mapa do RGM</h3> <b>[beta]</b> | <a href='https://github.com/edilqueirozdearaujo/rgm-map'><b>Código fonte</b></a> | <a href='about.php'><b>Sobre</b></a> </div>";
-var map = L.mapbox.map('mapdiv');
+//initialization ************************************************************
+var SelBaselayersDivContent = "";
 
+/*var SelBaselayersDiv     =  document.getElementById('select-baselayers');	 //obtem objeto
+SelBaselayersDivContent = SelBaselayersDiv.innerHTML;                       //backup
+SelBaselayersDiv.innerHTML = "";                                        //limpa <div>  
+
+*/
+var MapLegendTitle = SelBaselayersDivContent + ""; //DEPRECATED
+var map = L.mapbox.map('mapdiv');
+//***************************************************************************
 
 
 function ChangeLayer() {
 	var sel = document.getElementById('select-layer');
-	var Opcao = sel.options[sel.selectedIndex].value;		
+	var Opcao = sel.options[sel.selectedIndex].value;	
 	
 	//Transforma string em layer
 	switch( Opcao ) {
@@ -18,9 +26,9 @@ function ChangeLayer() {
 		case 'layer_cycle'            : sLayer = layer_cycle; break;	
 		case 'layer_MapboxBike'       : sLayer = layer_MapboxBike; break;	
 		case 'layer_MapboxPencil' : sLayer = layer_MapboxPencil; break;	
-		case 'layer_MapboxComic' : sLayer = layer_MapboxComic; break;	
+		case 'layer_MapboxComic'  : sLayer = layer_MapboxComic; break;	
 		case 'layer_MapboxPirates' : sLayer = layer_MapboxPirates; break;	
-		case 'layer_StamenWater' : sLayer = layer_StamenWater; break;	
+		case 'layer_StamenWater'  : sLayer = layer_StamenWater; break;	
 		case 'layer_StamenTonerL' : sLayer = layer_StamenTonerL; break;	
 		case 'layer_StamenToner'  : sLayer = layer_StamenToner; break;	
 		case 'layer_MapboxWheatpaste' : sLayer = layer_MapboxWheatpaste; break;	
@@ -34,7 +42,7 @@ function ChangeLayer() {
     if (map.hasLayer(sLayer)) {
             map.removeLayer(sLayer);
             this.className = '';
-        } else {
+    } else {
             map.addLayer(sLayer);
             this.className = 'active';
     }	
@@ -55,6 +63,7 @@ function ItemLegenda(Dados) {
 }
 
 function AtualizarLegenda(Legenda) {
+	
 	//pega coordenadas
 	var Cnt = map.getCenter();
 	var Lat = Cnt.lat;
@@ -87,7 +96,7 @@ layer_mapnik.addTo(map);
 
 var BaseLayers = {
 //DEPRECATED
-/*
+/*    
     'OpenStreetMap': layer_mapnik,
     'Light'        : layer_MapboxLight,
     'Dark'         : layer_MapboxDark,
@@ -181,9 +190,9 @@ Escala.addTo(map);
 		 });
 
 
-		AtualizarLegenda('map-legend');			
+		AtualizarLegenda('map-legend-btn');			
 		map.on('moveend', function(e) {
-			AtualizarLegenda('map-legend');					
+			AtualizarLegenda('map-legend-btn');					
 		});	
 
 		refreshMapillary();
