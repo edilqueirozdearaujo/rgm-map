@@ -27,7 +27,7 @@ function ChangeLayer() {
 		case 'lMBB' : sLayer = lMBB; break;	
 		case 'lMBP' : sLayer = lMBP; break;	
 		case 'lMBC' : sLayer = lMBC; break;	
-		case 'lMBP' : sLayer = lMBP; break;	
+		case 'lMBR' : sLayer = lMBR; break;	
 		case 'lSTW' : sLayer = lSTW; break;	
 		case 'lSTL' : sLayer = lSTL; break;	
 		case 'lSTT' : sLayer = lSTT; break;	
@@ -39,7 +39,8 @@ function ChangeLayer() {
 	}	
 	
 	//remove camadas existentes
-	map.eachLayer(function(layer) { map.removeLayer(layer); });
+	RmBaseLayers(); //Apenas as baselayers, preserve as overlays
+	//map.eachLayer(function(layer) { map.removeLayer(layer); });
 /*
     if (map.hasLayer(sLayer)) {
             map.removeLayer(sLayer);

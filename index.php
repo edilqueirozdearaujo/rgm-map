@@ -129,7 +129,7 @@ include_once "include/proc.php";
 		           <option id='lMBB' value='lMBB' >Bike</option>
 		           <option id='lMBP' value='lMBP' >Lápis</option>
 		           <option id='lMBC' value='lMBC' >Comic</option>
-		           <option id='lMBP' value='lMBP' >Piratas</option>
+		           <option id='lMBR' value='lMBR' >Piratas</option>
 		           <option id='lSTW' value='lSTW' >Aquarela</option>
 		           <option id='lSTL' value='lSTL' >Toner Light</option>
 		           <option id='lSTT' value='lSTT' >Toner Dark</option>
@@ -158,7 +158,7 @@ include_once "include/proc.php";
 		if( isset($SetBaseLayer) ) {
 			if( IsValidLayer($SetBaseLayer) ) {
 					Linha("		//Layer padrão modificada por URL");	
-				 	Linha("		map.eachLayer(function(layer) { map.removeLayer(layer); }); //first, remove all layers"); 				 					 	
+				 	Linha("		RmBaseLayers(); //first, remove all baselayers"); 				 					 	
 				 	Linha("		map.addLayer(".$SetBaseLayer.");");
 				 	Linha("		document.getElementById('".$SetBaseLayer."').selected = true;");				 	
 			}

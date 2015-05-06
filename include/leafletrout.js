@@ -58,7 +58,7 @@ var lMBS = layer_MapboxStreets
 var lMBL = layer_MapboxLight;
 var lMBD = layer_MapboxDark;
 var lMBO = layer_MapboxOutdoors;
-var lMBP = layer_MapboxPirates;
+var lMBR = layer_MapboxPirates;
 var lMBW = layer_MapboxWheatpaste;
 var lMBB = layer_MapboxBike;
 var lMBP = layer_MapboxPencil;
@@ -98,4 +98,34 @@ function AttrIfLayerIsOn( Camada, Attr ) {
 	}else {
 	     map.attributionControl.removeAttribution(Attr);
 	}	
+}
+
+function RmIfLIsOn( Camada ) {
+	if ( map.hasLayer( Camada )) {
+	      map.removeLayer(Camada);
+	}	
+}
+
+
+//Precisa ser escrita de uma forma mais prática, mas tá funcionando por enquanto :P
+function RmBaseLayers() {
+	RmIfLIsOn( lMNK );
+	RmIfLIsOn( lMKG );
+	RmIfLIsOn( lMBL );
+	RmIfLIsOn( lMBD );
+	RmIfLIsOn( lOTD );
+	RmIfLIsOn( lMBO );
+	RmIfLIsOn( lCYL );
+	RmIfLIsOn( lMBB );
+	RmIfLIsOn( lMBP );
+	RmIfLIsOn( lMBC );
+	RmIfLIsOn( lMBR );
+	RmIfLIsOn( lSTW );
+	RmIfLIsOn( lSTL );
+	RmIfLIsOn( lSTT );
+	RmIfLIsOn( lMBW );
+	RmIfLIsOn( lMBS );
+	RmIfLIsOn( lESR );
+	RmIfLIsOn( lIBR );
+	RmIfLIsOn( lIBU );
 }
