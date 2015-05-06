@@ -9,7 +9,7 @@
 include_once "include/lang.php"; 	
 include_once "include/config.php"; 	
 include_once "include/funcoes.php"; 	
-//include_once "include/db.php"; 	
+include_once "include/db.php"; 	
 include_once "include/proc.php"; 	 	
 
 
@@ -75,7 +75,13 @@ include_once "include/proc.php";
  	   }
  }
 
-
+ if (filter_has_var(INPUT_GET,'id')) {
+ 	 $MapID = filter_input(INPUT_GET,'id',FILTER_SANITIZE_STRING);
+ 	 $Mapa = SearchByID($MapID); 
+	 if ( $Mapa !== FALSE ){
+			$MapaAtributos = $Mapa;  
+	 }
+ }
 
 ?>
 
@@ -84,8 +90,12 @@ include_once "include/proc.php";
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <?
-       Linha("	<title>".GetMsg('SiteTitle')." </title>");     
+   <?	
+       if( isset( $MapaAtributos ) ) {
+           Linha("	<title>" . $MapaAtributos['Titulo'] . " | " .  GetMsg('SiteTitle')." </title>");
+       }else{ 
+           Linha("	<title>".GetMsg('SiteTitle')." </title>");
+       }     
    ?>
 	<link href="css/geral.css" rel="stylesheet" type="text/css"/>	
 	<link href="css/map.css" rel="stylesheet" type="text/css"/>	
@@ -181,9 +191,17 @@ include_once "include/proc.php";
 				 	Linha("		ControlLayers.addOverlay(layer_Custom, '".$CustomOverLay[1]."');");
 				 	Linha("		map.addLayer(layer_Custom);");
 		}
+		
+      if( isset( $MapaAtributos ) ) {
+      	$RGMGo = "http://projetorgm.com.br/?go=";
+      	$RGMGoNick = $RGMGo . $MapaAtributos['Nick']; 
+      	$RGMGoNick = "<small><a href='".$RGMGoNick."'>Link desse mapa</a><small>";
+      	
+      	$Legenda = "<p><b>". $MapaAtributos['Titulo'] ."</b></p><p>". $MapaAtributos['Descricao'] ."</p>" . $RGMGoNick;
+			Linha("		map.legendControl.addLegend(\"".$Legenda."\");");
+		}
 
 		Linha("	</script>");
 	?>	
-
 </body>
 </html>

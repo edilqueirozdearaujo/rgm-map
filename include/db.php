@@ -42,31 +42,17 @@ function MySQLResultsFromSQL($SQL) {
 
 //Search calendar and return as array
 function SearchByID($ID) {
-	global 	$cFdCalID,$cFdCalDate,$cFdCalTime,$cFdCalkeys,$cFdCalType, $cFdCalCountry;
 	//--------------------------------------------------------------------
 	$Resultado = FALSE; 
 	$IDInt = FromBase36($ID);
 	$Res = DBServerConnect();
 	if( DBIsConnected($Res)) {
 		if (DBSelect(cDBName)){
-			$SQL = "SELECT * FROM ".cTbCalendars." WHERE $cFdCalID = $IDInt LIMIT 1;";
+			$SQL = "SELECT * FROM RGMGoTo WHERE ID = $IDInt LIMIT 1;";
 
 			$ExeSQL = mysql_query($SQL);
 			if( MySQLResults($ExeSQL) > 0 ) {
-				 $Registro = mysql_fetch_array($ExeSQL);
-				
-				 //Convert simple string to array of Mapillary keys				 
-				 $KeysTemp = explode(cMapillaryKeySeparator, $Registro[$cFdCalkeys]);
-				 $Total = count($KeysTemp);
-				 for( $Cont = 1; $Cont <= $Total; $Cont++  ) {
-				 	$MapillaryKeys[$Cont] = $KeysTemp[$Cont-1];
-				 }
-				 
-			    $Resultado[$cFdCalDate] = $Registro[$cFdCalDate];  
-			    $Resultado[$cFdCalTime] = $Registro[$cFdCalTime];  
-			    $Resultado[$cFdCalkeys] = $MapillaryKeys;  
-			    $Resultado[$cFdCalType] = $Registro[$cFdCalType];
-			    $Resultado[$cFdCalCountry] = $Registro[$cFdCalCountry];  
+				 $Resultado = mysql_fetch_array($ExeSQL);
 			}
 		}
 		DBServerDisconnect($Res);

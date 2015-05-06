@@ -10,8 +10,7 @@ function IsValidLayer($Test){
 //			  . ",MapboxComic,MapboxStreets,MapboxLight,MapboxDark,MapboxOutdoors,MapboxPirates,MapboxWheatpaste,MapboxBike,MapboxPencil";
 	
 	
-	$Layers = "lMNK,lMKG,lOTD,lCYL,lESR,lIBR,lIBU,lSTW,lSTT,lSTL"
-			  . ",lMBC,lMBS,lMBL,lMBD,lMBO,lMBP,lMBW,lMBB,lMBP";
+	$Layers = "lMNK,lMKG,lOTD,lCYL,lESR,lIBR,lIBU,lSTW,lSTT,lSTL,lMBC,lMBS,lMBL,lMBD,lMBO,lMBP,lMBW,lMBB,lMBR,";
 	
 	//Novas layers aqui!!!!!!!!!!!!!!!! //
 	if( StrPosicao($Test,$Layers) > 0 ) {
