@@ -119,25 +119,25 @@ include_once "include/proc.php";
 			<div id='select-baselayers'>	
 				Estilo de Mapa:
 		      <select id='select-layer' name='select-layer' onChange='ChangeLayer();' >  
-		           <option value='layer_mapnik'            >OpenStreetMap</option>  
-		           <option value='layer_OSMbw'             >OSM Tons de cinza</option>  
-		           <option value='layer_MapboxLight'       >Light</option>  
-		           <option value='layer_MapboxDark'        >Dark</option>
-		           <option value='layer_outdoors'          >Ar livre</option>
-		           <option value='layer_MapboxOutdoors'    >Ar livre Mapbox</option>
-		           <option value='layer_cycle'             >Ciclistas</option>
-		           <option value='layer_MapboxBike'        >Bike</option>
-		           <option value='layer_MapboxPencil'       >Lápis</option>
-		           <option value='layer_MapboxComic'       >Comic</option>
-		           <option value='layer_MapboxPirates'       >Piratas</option>
-		           <option value='layer_StamenWater'       >Aquarela</option>
-		           <option value='layer_StamenTonerL'       >Toner Light</option>
-		           <option value='layer_StamenToner'        >Toner Dark</option>
-		           <option value='layer_MapboxWheatpaste'  >Poster Lambe-lambe</option>
-		           <option value='layer_MapboxStreets'      >Satélite Mapbox</option>
-		           <option value='layer_ESRI'               >Satélite ESRI</option>
-		           <option value='layer_IBGEr'              >IBGE Rural</option>
-		           <option value='layer_IBGEu'              >IBGE Urbano</option>
+		           <option id='lMNK' value='lMNK' >OpenStreetMap</option>  
+		           <option id='lMKG' value='lMKG' >OSM Tons de cinza</option>  
+		           <option id='lMBL' value='lMBL' >Light Mapbox</option>  
+		           <option id='lMBD' value='lMBD' >Dark Mapbox</option>
+		           <option id='lOTD' value='lOTD' >Ar livre</option>
+		           <option id='lMBO' value='lMBO' >Ar livre Mapbox</option>
+		           <option id='lCYL' value='lCYL' >Ciclistas</option>
+		           <option id='lMBB' value='lMBB' >Bike</option>
+		           <option id='lMBP' value='lMBP' >Lápis</option>
+		           <option id='lMBC' value='lMBC' >Comic</option>
+		           <option id='lMBP' value='lMBP' >Piratas</option>
+		           <option id='lSTW' value='lSTW' >Aquarela</option>
+		           <option id='lSTL' value='lSTL' >Toner Light</option>
+		           <option id='lSTT' value='lSTT' >Toner Dark</option>
+		           <option id='lMBW' value='lMBW' >Poster Lambe-lambe</option>
+		           <option id='lMBS' value='lMBS' >Satélite Mapbox</option>
+		           <option id='lESR' value='lESR' >Satélite lESR</option>
+		           <option id='lIBR' value='lIBR' >IBGE Rural</option>
+		           <option id='lIBU' value='lIBU' >IBGE Urbano</option>
 		      </select>
 			</div>
 
@@ -157,9 +157,10 @@ include_once "include/proc.php";
 		//Layer foi especificada por URL?
 		if( isset($SetBaseLayer) ) {
 			if( IsValidLayer($SetBaseLayer) ) {
-					Linha("		//Layer padrão modificada por URL");
-				 	Linha("		map.removeLayer(layer_mapnik);"); 
-				 	Linha("		map.addLayer(layer_".$SetBaseLayer.");");
+					Linha("		//Layer padrão modificada por URL");	
+				 	Linha("		map.eachLayer(function(layer) { map.removeLayer(layer); }); //first, remove all layers"); 				 					 	
+				 	Linha("		map.addLayer(".$SetBaseLayer.");");
+				 	Linha("		document.getElementById('".$SetBaseLayer."').selected = true;");				 	
 			}
 		}
 

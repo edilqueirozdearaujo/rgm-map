@@ -17,35 +17,39 @@ function ChangeLayer() {
 	
 	//Transforma string em layer
 	switch( Opcao ) {
-		case 'layer_mapnik'       : sLayer = layer_mapnik; break;	
-		case 'layer_OSMbw'        : sLayer = layer_OSMbw; break;	
-		case 'layer_MapboxLight'  : sLayer = layer_MapboxLight; break;
-		case 'layer_MapboxDark'   : sLayer = layer_MapboxDark; break;	
-		case 'layer_outdoors'     : sLayer = layer_outdoors; break;	
-		case 'layer_MapboxOutdoors'   : sLayer = layer_MapboxOutdoors; break;	
-		case 'layer_cycle'            : sLayer = layer_cycle; break;	
-		case 'layer_MapboxBike'       : sLayer = layer_MapboxBike; break;	
-		case 'layer_MapboxPencil' : sLayer = layer_MapboxPencil; break;	
-		case 'layer_MapboxComic'  : sLayer = layer_MapboxComic; break;	
-		case 'layer_MapboxPirates' : sLayer = layer_MapboxPirates; break;	
-		case 'layer_StamenWater'  : sLayer = layer_StamenWater; break;	
-		case 'layer_StamenTonerL' : sLayer = layer_StamenTonerL; break;	
-		case 'layer_StamenToner'  : sLayer = layer_StamenToner; break;	
-		case 'layer_MapboxWheatpaste' : sLayer = layer_MapboxWheatpaste; break;	
-		case 'layer_MapboxStreets': sLayer = layer_MapboxStreets; break;	
-		case 'layer_ESRI'         : sLayer = layer_ESRI; break;	
-		case 'layer_IBGEr'        : sLayer = layer_IBGEr; break;	
-		case 'layer_IBGEu'        : sLayer = layer_IBGEu; break;	
+		case 'lMNK' : sLayer = lMNK; break;	
+		case 'lMKG' : sLayer = lMKG; break;	
+		case 'lMBL' : sLayer = lMBL; break;
+		case 'lMBD' : sLayer = lMBD; break;	
+		case 'lOTD' : sLayer = lOTD; break;	
+		case 'lMBO' : sLayer = lMBO; break;	
+		case 'lCYL' : sLayer = lCYL; break;	
+		case 'lMBB' : sLayer = lMBB; break;	
+		case 'lMBP' : sLayer = lMBP; break;	
+		case 'lMBC' : sLayer = lMBC; break;	
+		case 'lMBP' : sLayer = lMBP; break;	
+		case 'lSTW' : sLayer = lSTW; break;	
+		case 'lSTL' : sLayer = lSTL; break;	
+		case 'lSTT' : sLayer = lSTT; break;	
+		case 'lMBW' : sLayer = lMBW; break;	
+		case 'lMBS' : sLayer = lMBS; break;	
+		case 'lESR' : sLayer = lESR; break;	
+		case 'lIBR' : sLayer = lIBR; break;	
+		case 'lIBU' : sLayer = lIBU; break;	
 	}	
 	
-	//Verifica existência da camada	
+	//remove camadas existentes
+	map.eachLayer(function(layer) { map.removeLayer(layer); });
+/*
     if (map.hasLayer(sLayer)) {
             map.removeLayer(sLayer);
             this.className = '';
     } else {
             map.addLayer(sLayer);
             this.className = 'active';
-    }	
+    }
+*/    	
+   map.addLayer(sLayer);
 }
 
 

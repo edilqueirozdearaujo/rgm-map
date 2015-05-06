@@ -5,8 +5,13 @@
 function IsValidLayer($Test){
 	$IsLayer = FALSE;
 	$Test = $Test . ",";
-	$Layers = "mapnik,OSMbw,outdoors,cycle,ESRI,IBGEr,IBGEu,MapBox,StamenWater,StamenToner,StamenTonerL"
-			  . ",MapboxComic,MapboxStreets,MapboxLight,MapboxDark,MapboxOutdoors,MapboxPirates,MapboxWheatpaste,MapboxBike,MapboxPencil";
+
+//	$Layers = "mapnik,OSMbw,outdoors,cycle,ESRI,IBGEr,IBGEu,MapBox,StamenWater,StamenToner,StamenTonerL"
+//			  . ",MapboxComic,MapboxStreets,MapboxLight,MapboxDark,MapboxOutdoors,MapboxPirates,MapboxWheatpaste,MapboxBike,MapboxPencil";
+	
+	
+	$Layers = "lMNK,lMKG,lOTD,lCYL,lESR,lIBR,lIBU,lSTW,lSTT,lSTL"
+			  . ",lMBC,lMBS,lMBL,lMBD,lMBO,lMBP,lMBW,lMBB,lMBP";
 	
 	//Novas layers aqui!!!!!!!!!!!!!!!! //
 	if( StrPosicao($Test,$Layers) > 0 ) {
@@ -95,6 +100,5 @@ function FBShare($URL) {
 	Linha("		}(document, 'script', 'facebook-jssdk'));</script>");
 	Linha("<div class='fb-share-button' data-href='$URL' data-layout='button_count'></div>");
 }
-
 
 ?>

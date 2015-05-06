@@ -41,6 +41,28 @@ var layer_MapboxBike     = L.mapbox.tileLayer('projetorgm.loj474lm');
 var layer_MapboxPencil   = L.mapbox.tileLayer('projetorgm.loj51j3n');
 
 
+//Atahos - shortcuts *******************************************************
+var lMNK = layer_mapnik;
+var lMKG = layer_OSMbw;
+var lOTD = layer_outdoors;
+var lCYL = layer_cycle;
+var lESR = layer_ESRI;
+var lIBR = layer_IBGEr;
+var lIBU = layer_IBGEu;
+//var lMBI = layer_MapBox;
+var lSTW = layer_StamenWater;
+var lSTT = layer_StamenToner;
+var lSTL = layer_StamenTonerL;
+var lMBC = layer_MapboxComic;
+var lMBS = layer_MapboxStreets
+var lMBL = layer_MapboxLight;
+var lMBD = layer_MapboxDark;
+var lMBO = layer_MapboxOutdoors;
+var lMBP = layer_MapboxPirates;
+var lMBW = layer_MapboxWheatpaste;
+var lMBB = layer_MapboxBike;
+var lMBP = layer_MapboxPencil;
+//       ******************************************************************
 
 
 
