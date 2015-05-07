@@ -193,11 +193,15 @@ include_once "include/proc.php";
 		}
 		
       if( isset( $MapaAtributos ) ) {
+      	if (isset($CustomOverLay) ){
+      	    $LayerMapBox = $CustomOverLay[0];
+      	}
       	$RGMGo = "http://projetorgm.com.br/?go=";
       	$RGMGoNick = $RGMGo . $MapaAtributos['Nick']; 
-      	$RGMGoNick = "<small><a href='".$RGMGoNick."'>Link desse mapa</a><small>";
+      	$RGMGoNick = "<small><a href='".$RGMGoNick."'>LINK</a></small>";
+      	$LinkMapboxMapa = "<small><a href='https://a.tiles.mapbox.com/v4/".$LayerMapBox."/page.html?access_token=pk.eyJ1IjoicHJvamV0b3JnbSIsImEiOiJqeVpremF3In0.SCxZ4ah9ZKxWcELgsKQyWA'>VER NO MAPBOX</a></small>";
       	
-      	$Legenda = "<p><b>". $MapaAtributos['Titulo'] ."</b></p><p>". $MapaAtributos['Descricao'] ."</p>" . $RGMGoNick;
+      	$Legenda = "<p><b>". $MapaAtributos['Titulo'] ."</b></p><p>". $MapaAtributos['Descricao'] ."</p>" . $RGMGoNick . " | " . $LinkMapboxMapa;
 			Linha("		map.legendControl.addLegend(\"".$Legenda."\");");
 		}
 
