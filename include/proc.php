@@ -58,7 +58,10 @@ function DrawHeader($MinhaURL) {
 
 function Footer() {
    Linha("	<div class='footer'>");
-   Linha("		<p class='alinhar-centro'> " . cSiteRGM . " | <img class='alinhar-vertical' src='imagens/icons/git-w.png' /> " . GetMsg('GetSource')."</p>");
+   Linha("		<p class='alinhar-centro'>");
+   Linha("			" . cSiteRGM . " | <img class='alinhar-vertical' src='imagens/icons/git-w.png' /> " . GetMsg('GetSource'));
+	Linha("			 | <a href='http://projetorgm.com.br/rede-de-projetos/' title='Conheça a Rede de Projetos'><img class='alinhar-vertical' width='32px' src='imagens/creditos/rede-de-projetos.png'  alt=' Rede de Projetos ' /> Uma iniciativa fundada na Rede de Projetos</a>");
+   Linha("		</p>");
    Linha("	</div>");
    Linha(" ");									
 }

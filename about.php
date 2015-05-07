@@ -105,7 +105,7 @@ include_once "include/proc.php";
 			<div class='alinhar-centro'>
 					<h3 class='creditos item-alinhado'><a href='https://projetorgm.com.br/rede-de-projetos/' title='Conheça a Rede de Projetos'><img src='imagens/creditos/rede-de-projetos.png'  alt=' Rede de Projetos ' /> Rede de Projetos</a></h3> 
 					<h3 class='creditos item-alinhado'><a href='https://projetorgm.com.br/osm/' title='Conheça o OpenStreetMap'><img src='imagens/creditos/logo-osm.png'  alt=' OpenStreetMap ' /> OpenStreetMap</a></h3> 
-					<h3 class='creditos item-alinhado'><a href='http://mapillary.com/' title='Conheça o Mapillary!'><img src='imagens/creditos/mapillary-logo.jpg'  alt=' Mapillary ' /></a></h3> 
+					<h3 class='creditos item-alinhado'><a href='http://mapillary.com/' title='Conheça o Mapillary!'><img src='imagens/creditos/mapillary-logo.png'  alt=' Mapillary ' /></a></h3> 
 					<h3 class='creditos item-alinhado'><a href='https://www.mapbox.com/design/' title='Desenvolvido com Mapbox'><img src='imagens/creditos/mapbox.png'  alt=' Mapbox.js ' /></a></h3> 
 					<h3 class='creditos item-alinhado'><a href='http://bluefish.openoffice.nl/' title='Site construído usando BlueFish'><img src='imagens/creditos/bluefish.png'  alt=' BlueFish ' /> BlueFish</a></h3> 
 					<h3 class='creditos item-alinhado'><a href='http://hostinger.com.br/' title='Site hospedado por Hostinger'><img src='imagens/creditos/hostinger.png'  alt=' Hostinger ' /></a></h3> 
