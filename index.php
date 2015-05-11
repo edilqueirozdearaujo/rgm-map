@@ -64,7 +64,8 @@ include_once "include/proc.php";
  }
  //Overlay foi escolhida por URL?
  if (filter_has_var(INPUT_GET,'overlay')) {
- 	   $SetOverlay = filter_input(INPUT_GET,'overlay',FILTER_SANITIZE_STRING);
+ 	   $SetOverlayTemp = filter_input(INPUT_GET,'overlay',FILTER_SANITIZE_STRING);
+ 	   $SetOverlay = explode(";", $SetOverlayTemp);
  }
  //Overlayer customizada foi escolhida por URL?
  if (filter_has_var(INPUT_GET,'ovlaycust')) {
@@ -177,10 +178,15 @@ include_once "include/proc.php";
 		//Overlay foi especificada por URL?
 		Linha(" ");
 		if( isset($SetOverlay) ) {
-			if( IsValidOverlay($SetOverlay) ) {
-					Linha("		//Overlay adicionada por URL");
-				 	Linha("		map.addLayer(layer_".$SetOverlay.");");
-			}
+			$Total = count($SetOverlay);
+//			Linha("		window.alert('$Total')");
+			for( $Cont = 0; $Cont < $Total; $Cont++ ) {
+					if( $SetOverlay[$Cont] == "Mapillary" ) { $SetOverlay[$Cont] = "MPLL"; } //Fix
+					if( IsValidOverlay($SetOverlay[$Cont]) ) {
+							Linha("		//Overlay adicionada por URL");
+						 	Linha("		map.addLayer(ol".$SetOverlay[$Cont].");");
+					}
+			}			
 		}
 
 		//OverLayer foi especificada por URL?

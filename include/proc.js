@@ -155,12 +155,23 @@ var layer_oplLixo = new L.OverPassLayer({
 	   query: "( node(BBOX)['amenity'='waste_disposal']; node(BBOX)['amenity'='waste_basket']; node(BBOX)['amenity'='recycling'];  node(BBOX)['amenity'='recycling']; );out;"   
 });
 
-ControlLayers.addOverlay(layer_oplAlimentacao, 'Onde se alimentar?');
-ControlLayers.addOverlay(layer_oplAcomodacao, 'Onde dormir?');				
-ControlLayers.addOverlay(layer_oplTurismo, 'Turismo');				
-ControlLayers.addOverlay(layer_oplTransporte, 'Transporte');				
-ControlLayers.addOverlay(layer_oplBasicos, 'Utilidades básicas');								
-ControlLayers.addOverlay(layer_oplNasc, 'Nascentes');								
+
+var olMPLL = layer_Mapillary;
+var olALIM = layer_oplAlimentacao;
+var olACOM = layer_oplAcomodacao;
+var olACOM = layer_oplAcomodacao;
+var olTURI = layer_oplTurismo;
+var olTRSP = layer_oplTransporte;
+var olUTIL = layer_oplBasicos;
+var olNASC = layer_oplNasc;
+
+
+ControlLayers.addOverlay(olALIM, 'Onde se alimentar?');
+ControlLayers.addOverlay(olACOM, 'Onde dormir?');				
+ControlLayers.addOverlay(olTURI, 'Turismo');				
+ControlLayers.addOverlay(olTRSP, 'Transporte');				
+ControlLayers.addOverlay(olUTIL, 'Utilidades básicas');								
+ControlLayers.addOverlay(olNASC, 'Nascentes');								
 //ControlLayers.addOverlay(layer_oplLixo, 'Onde jogar lixo?');
 
 ControlLayers.addTo(map);

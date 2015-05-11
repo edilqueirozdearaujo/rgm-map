@@ -65,7 +65,6 @@ var lMBP = layer_MapboxPencil;
 //       ******************************************************************
 
 
-
 var layer_Mapillary    = L.mapbox.featureLayer();
 	layer_Mapillary.on('layeradd', function(e) {
         e.layer.bindPopup('<img width="128px" src="' + e.layer.feature.properties.image + '" />', {
