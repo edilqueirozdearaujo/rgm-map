@@ -36,9 +36,19 @@ function GetScreenHeight() {
 }
 
 
+//+ opção target=''
+function HrefFromURLPlus(Link,Titulo,Conteudo,Alvo) {
+	var TagAlvo = "";
+	if ( Alvo ) {
+		TagAlvo = " target='"+ Alvo +"' ";
+	}
+	FullLink = "<a href='" + Link + "' title='"+ Titulo + "' " + TagAlvo + " >"+ Conteudo +"</a>";
+	return FullLink;
+}
+
 
 function HrefFromURL(Link,Titulo,Conteudo) {
-	FullLink = "<a href='" + Link + "' title='"+ Titulo +"'>"+ Conteudo +"</a>";
+	FullLink = HrefFromURLPlus(Link,Titulo,Conteudo,"");
 	return FullLink;
 }
 
@@ -69,4 +79,12 @@ function GetLinkOSMd(Lat,Lon) {
 	return Link;
 }
 
+
+//Check if the map is inside of an IFRAME
+//Fonte: http://pt.stackoverflow.com/questions/49538/como-pegar-a-url-da-p%C3%A1gina-pai-de-um-iframe-sem-estar-no-mesmo-dom%C3%ADnio
+function MapIsEmb() {
+	//document.referrer : null;
+  var parentURL = window != window.parent; 
+  return parentURL; 
+}
 

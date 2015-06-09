@@ -1,5 +1,11 @@
 //initialization ************************************************************
+var LinksAlvo = "";
 var SelBaselayersDivContent = "";
+var MapaEmbutido = MapIsEmb();
+//Os links dos botões devem abrir fora do iframe ou quadro onde o mapa foi embutido
+if ( MapaEmbutido ) {
+  LinksAlvo = '_parent';  
+}
 
 /*var SelBaselayersDiv     =  document.getElementById('select-baselayers');	 //obtem objeto
 SelBaselayersDivContent = SelBaselayersDiv.innerHTML;                       //backup
@@ -80,13 +86,14 @@ function AtualizarLegenda(Legenda) {
 	PreLinkOSMe      = GetLinkOSMe(Lat,Lon);
 	PreLinkOSMd      = GetLinkOSMd(Lat,Lon);
 	
-	LinkOSMR      = ItemLegenda(HrefFromURL(PreLinkOSMR,"Como chegar até aqui","Como chegar"));
-	LinkMapillary = ItemLegenda(HrefFromURL(PreLinkMapillary,"Fotos e streetview","Streetview"));
-	LinkF4Map = ItemLegenda(HrefFromURL(PreLinkF4Map,"Veja em 3D","Veja em 3D"));
-	LinkOSMe  = ItemLegenda(HrefFromURL(PreLinkOSMe,"Edite este mapa","Edite este mapa"));
-	LinkOSMd  = ItemLegenda(HrefFromURL(PreLinkOSMd,"Detalhes sobre os dados: Histórico, autores, etc","Dados do mapa"));
+	
+	LinkOSMR      = ItemLegenda(HrefFromURLPlus(PreLinkOSMR,"Como chegar até aqui","Como chegar",LinksAlvo));
+	LinkMapillary = ItemLegenda(HrefFromURLPlus(PreLinkMapillary,"Fotos e streetview","Streetview",LinksAlvo));
+	LinkF4Map = ItemLegenda(HrefFromURLPlus(PreLinkF4Map,"Veja em 3D","Veja em 3D",LinksAlvo));
+	LinkOSMe  = ItemLegenda(HrefFromURLPlus(PreLinkOSMe,"Edite este mapa","Edite este mapa",LinksAlvo));
+	LinkOSMd  = ItemLegenda(HrefFromURLPlus(PreLinkOSMd,"Detalhes sobre os dados: Histórico, autores, etc","Dados do mapa",LinksAlvo));
 
-	LinkPrint  = ItemLegenda(HrefFromURL('#',"Imprimir","Imprimir <small>(em breve)</small>"));
+	LinkPrint  = ItemLegenda(HrefFromURLPlus('#',"Imprimir","Imprimir <small>(em breve)</small>"));
 	
 	LinksLegenda = LinkOSMR + LinkMapillary + LinkF4Map + LinkOSMd + LinkOSMe + LinkPrint 
 					+ MapLegendTitle;
@@ -215,4 +222,4 @@ Escala.addTo(map);
 		map.on('dragend', function(e) {
 			refreshMapillary();					
 		});	
-					
+										
