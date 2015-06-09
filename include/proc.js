@@ -83,19 +83,23 @@ function AtualizarLegenda(Legenda) {
 	PreLinkOSMR      = GetLinkOSMR(Lat,Lon); 
 	PreLinkMapillary = GetLinkMapillary(Lat,Lon);
 	PreLinkF4Map     = GetLinkF4Map(Lat,Lon);
+	PreLinkEcoMap    = GetLinkEcoMap(Lat,Lon);
 	PreLinkOSMe      = GetLinkOSMe(Lat,Lon);
 	PreLinkOSMd      = GetLinkOSMd(Lat,Lon);
+	PreLinkLast90    = GetLinkLast90Edits(Lat,Lon);
 	
 	
 	LinkOSMR      = ItemLegenda(HrefFromURLPlus(PreLinkOSMR,"Como chegar até aqui","Como chegar",LinksAlvo));
 	LinkMapillary = ItemLegenda(HrefFromURLPlus(PreLinkMapillary,"Fotos e streetview","Streetview",LinksAlvo));
-	LinkF4Map = ItemLegenda(HrefFromURLPlus(PreLinkF4Map,"Veja em 3D","Veja em 3D",LinksAlvo));
-	LinkOSMe  = ItemLegenda(HrefFromURLPlus(PreLinkOSMe,"Edite este mapa","Edite este mapa",LinksAlvo));
-	LinkOSMd  = ItemLegenda(HrefFromURLPlus(PreLinkOSMd,"Detalhes sobre os dados: Histórico, autores, etc","Dados do mapa",LinksAlvo));
+	LinkF4Map  = ItemLegenda(HrefFromURLPlus(PreLinkF4Map,"Veja em 3D","Em 3D",LinksAlvo));
+	LinkEcoMap = ItemLegenda(HrefFromURLPlus(PreLinkEcoMap,"Mapa ecológico","Mapa ecológico",LinksAlvo));
+	LinkOSMe   = ItemLegenda(HrefFromURLPlus(PreLinkOSMe,"Edite este mapa","Editar mapa",LinksAlvo));
+	LinkLast90 = ItemLegenda(HrefFromURLPlus(PreLinkLast90,"Edições nos últimos 90 dias","Ver edições",LinksAlvo));
+	LinkOSMd   = ItemLegenda(HrefFromURLPlus(PreLinkOSMd,"Detalhes sobre os dados: Histórico, autores, etc","Ver dados",LinksAlvo));
 
 	LinkPrint  = ItemLegenda(HrefFromURLPlus('#',"Imprimir","Imprimir <small>(em breve)</small>"));
 	
-	LinksLegenda = LinkOSMR + LinkMapillary + LinkF4Map + LinkOSMd + LinkOSMe + LinkPrint 
+	LinksLegenda = LinkOSMR + LinkMapillary + LinkF4Map + LinkEcoMap + LinkOSMe + LinkLast90 + LinkOSMd + LinkPrint 
 					+ MapLegendTitle;
 
 	ComporLegenda(Legenda,LinksLegenda);				

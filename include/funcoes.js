@@ -79,6 +79,18 @@ function GetLinkOSMd(Lat,Lon) {
 	return Link;
 }
 
+//Recent edits: last 90 days - ito! map
+function GetLinkLast90Edits(Lat,Lon) {
+	var Link = "http://www.itoworld.com/map/129?lon="+ Lon + "&lat="+ Lat + "&zoom=14";
+	return Link;
+}
+
+
+function GetLinkEcoMap(Lat,Lon) {
+	var Link = "http://mapaecologico.com.br/?coord=" + Lat + "|" + Lon + "|11";
+	return Link;
+}
+
 
 //Check if the map is inside of an IFRAME
 //Fonte: http://pt.stackoverflow.com/questions/49538/como-pegar-a-url-da-p%C3%A1gina-pai-de-um-iframe-sem-estar-no-mesmo-dom%C3%ADnio
