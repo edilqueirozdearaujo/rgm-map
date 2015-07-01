@@ -76,3 +76,12 @@
 .itemlegenda a:hover{
   background-color: #ffffff;
 }
+
+
+.map-notes-icon{
+	font-size: 200%;
+	color: #43B043;
+	display: inline-table;
+	padding-right: 3px;
+	font-weight: bolder; 
+}

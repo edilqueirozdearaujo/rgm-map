@@ -92,6 +92,12 @@ function GetLinkEcoMap(Lat,Lon) {
 }
 
 
+function GetLinkNote(Lat,Lon) {
+	var Link = "http://www.openstreetmap.org/note/new#map=14/" + Lat + "/" + Lon;
+	return Link;
+}
+
+
 //Check if the map is inside of an IFRAME
 //Fonte: http://pt.stackoverflow.com/questions/49538/como-pegar-a-url-da-p%C3%A1gina-pai-de-um-iframe-sem-estar-no-mesmo-dom%C3%ADnio
 function MapIsEmb() {

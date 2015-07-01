@@ -158,8 +158,6 @@ include_once "include/proc.php";
 	</div>
 	<div id='geocode-selector'></div>
 	<div id='mapdiv'></div>
-
-
 	
 	<script src='include/proc.js'></script>
 

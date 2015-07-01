@@ -1,6 +1,7 @@
 //initialization ************************************************************
 var LinksAlvo = "";
 var SelBaselayersDivContent = "";
+var MapNotesPrev = "";  //Para remover a cada atualização
 var MapaEmbutido = MapIsEmb();
 //Os links dos botões devem abrir fora do iframe ou quadro onde o mapa foi embutido
 if ( MapaEmbutido ) {
@@ -14,6 +15,9 @@ SelBaselayersDiv.innerHTML = "";                                        //limpa 
 */
 var MapLegendTitle = SelBaselayersDivContent + ""; //DEPRECATED
 var map = L.mapbox.map('mapdiv');
+
+var legendNotes = new L.mapbox.LegendControl();
+legendNotes.addTo(map);
 //***************************************************************************
 
 
@@ -64,10 +68,12 @@ function LimparLegenda(Legenda) {
 	document.getElementById(Legenda).innerHTML = '';
 }
 
+
 function ComporLegenda(LegendaId, Conteudo) {
 	var Elem = document.getElementById(LegendaId);
 	Elem.innerHTML = Conteudo;	
 }
+
 
 function ItemLegenda(Dados) {
 	return " <div class='itemlegenda arredondar'>"+ Dados +"</div> ";
@@ -88,7 +94,6 @@ function AtualizarLegenda(Legenda) {
 	PreLinkOSMd      = GetLinkOSMd(Lat,Lon);
 	PreLinkLast90    = GetLinkLast90Edits(Lat,Lon);
 	
-	
 	LinkOSMR      = ItemLegenda(HrefFromURLPlus(PreLinkOSMR,"Como chegar até aqui","Como chegar",LinksAlvo));
 	LinkMapillary = ItemLegenda(HrefFromURLPlus(PreLinkMapillary,"Fotos e streetview","Streetview",LinksAlvo));
 	LinkF4Map  = ItemLegenda(HrefFromURLPlus(PreLinkF4Map,"Veja em 3D","Em 3D",LinksAlvo));
@@ -102,7 +107,17 @@ function AtualizarLegenda(Legenda) {
 	LinksLegenda = LinkOSMR + LinkMapillary + LinkF4Map + LinkEcoMap + LinkOSMe + LinkLast90 + LinkOSMd + LinkPrint 
 					+ MapLegendTitle;
 
-	ComporLegenda(Legenda,LinksLegenda);				
+	ComporLegenda(Legenda,LinksLegenda);
+
+	PreLinkNote      = GetLinkNote(Lat,Lon); 
+	LinkNote   = HrefFromURLPlus(PreLinkNote,"Localizou um erro ou algo faltando? Informe pra gente :).","Falta algo? Adicione uma nota",LinksAlvo);
+	
+	if (MapNotesPrev.length > 0) { 	
+      legendNotes.removeLegend(MapNotesPrev);
+	}
+	MapNotesPrev = "<div class='map-notes-icon'>+</div>" + LinkNote;
+	legendNotes.addLegend(MapNotesPrev);
+	  	
 }
 
 
