@@ -74,20 +74,22 @@ var layer_Mapillary    = L.mapbox.featureLayer();
 
 
 function refreshMapillary() {
-	var Box = map.getBounds();
-	var SOUTH = Box.getSouth();
-	var NORTH = Box.getNorth();
-	var WEST = Box.getWest();
-	var EAST = Box.getEast();
-	
-	var MapillarySearch = 'http://api.mapillary.com/v1/im/search?' + 
-			'min-lat=' + SOUTH +
-			'&max-lat=' + NORTH + 
-			'&min-lon=' + WEST +
-			'&max-lon=' + EAST +
-			'&max-results=85&geojson=true';	
+	if ( map.hasLayer( layer_Mapillary )) {
+			var Box = map.getBounds();
+			var SOUTH = Box.getSouth();
+			var NORTH = Box.getNorth();
+			var WEST = Box.getWest();
+			var EAST = Box.getEast();
+			
+			var MapillarySearch = 'http://api.mapillary.com/v1/im/search?' + 
+					'min-lat=' + SOUTH +
+					'&max-lat=' + NORTH + 
+					'&min-lon=' + WEST +
+					'&max-lon=' + EAST +
+					'&max-results=85&geojson=true';	
 
-	layer_Mapillary.loadURL(MapillarySearch);		
+			layer_Mapillary.loadURL(MapillarySearch);		
+	}
 }	
 
 

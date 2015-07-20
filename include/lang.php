@@ -2,7 +2,7 @@
 
 $Language = 'pt';
 
-$Msg['pt']['SiteTitle']          = "Mapa do RGM beta";
+$Msg['pt']['SiteTitle']          = "Mapa do RGM";
 $Msg['pt']['ErrSessStart']       = 'Erro ao iniciar sessão de forma segura';
 $Msg['pt']['NoticeBrowser']       = "Recomendado usar o navegador Mozilla Firefox ou Google Chrome";
 $Msg['pt']['BtnExit']            = "Sair";

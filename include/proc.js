@@ -1,6 +1,30 @@
 //initialization ************************************************************
+var MapBaseLayersSelect = "<span class='icon layers'></span>"
+		+"<select id='map-select-layer' >"
+			+"<option id='lMNK' value='lMNK' >OpenStreetMap</option>"  
+			+"<option id='lMKG' value='lMKG' >OSM Tons de cinza</option>"
+			+"<option id='lMBL' value='lMBL' >Light Mapbox</option>"  
+			+"<option id='lMBD' value='lMBD' >Dark Mapbox</option>"
+			+"<option id='lOTD' value='lOTD' >Ar livre</option>"
+			+"<option id='lMBO' value='lMBO' >Ar livre Mapbox</option>"
+			+"<option id='lCYL' value='lCYL' >Ciclistas</option>"
+			+"<option id='lMBB' value='lMBB' >Bike</option>"
+			+"<option id='lMBP' value='lMBP' >Lápis</option>"
+			+"<option id='lMBC' value='lMBC' >Comic</option>"
+			+"<option id='lMBR' value='lMBR' >Piratas</option>"
+			+"<option id='lSTW' value='lSTW' >Aquarela</option>"
+			+"<option id='lSTL' value='lSTL' >Toner Light</option>"
+			+"<option id='lSTT' value='lSTT' >Toner Dark</option>"
+			+"<option id='lMBW' value='lMBW' >Poster Lambe-lambe</option>"
+			+"<option id='lMBS' value='lMBS' >Satélite Mapbox</option>"
+			+"<option id='lESR' value='lESR' >Satélite lESR</option>"
+			+"<option id='lIBR' value='lIBR' >IBGE Rural</option>"
+			+"<option id='lIBU' value='lIBU' >IBGE Urbano</option>"
+		+"</select><div id='map-controls-group'></div>";
+
+
 var LinksAlvo = "";
-var SelBaselayersDivContent = "";
+var MapControlsInner = "";     //HTML que vai dentro do LegendControl ControlesDoMapa
 var MapNotesPrev = "";  //Para remover a cada atualização
 var MapaEmbutido = MapIsEmb();
 //Os links dos botões devem abrir fora do iframe ou quadro onde o mapa foi embutido
@@ -8,24 +32,16 @@ if ( MapaEmbutido ) {
   LinksAlvo = '_parent';  
 }
 
-/*var SelBaselayersDiv     =  document.getElementById('select-baselayers');	 //obtem objeto
-SelBaselayersDivContent = SelBaselayersDiv.innerHTML;                       //backup
-SelBaselayersDiv.innerHTML = "";                                        //limpa <div>  
+var map = L.mapbox.map('mapdiv'); //Cria o mapa
 
-*/
-var MapLegendTitle = SelBaselayersDivContent + ""; //DEPRECATED
-var map = L.mapbox.map('mapdiv');
-
-var legendNotes = new L.mapbox.LegendControl();
-legendNotes.addTo(map);
-//***************************************************************************
+//var legendNotes = new L.mapbox.LegendControl();
+var ControlesDoMapa = new L.mapbox.LegendControl({collapsed :true, position: 'topright'});
+ControlesDoMapa.addTo(map);
+ControlesDoMapa.addLegend(MapBaseLayersSelect); //A seleção das camadas do mapa não devem ser mudadas ao mover o mapa
 
 
-function ChangeLayer() {
-	var sel = document.getElementById('select-layer');
-	var Opcao = sel.options[sel.selectedIndex].value;	
-	
-	//Transforma string em layer
+function ChangeLayer(Opcao) {
+	//Transforma Opcao (string) em layer
 	switch( Opcao ) {
 		case 'lMNK' : sLayer = lMNK; break;	
 		case 'lMKG' : sLayer = lMKG; break;	
@@ -64,23 +80,12 @@ function ChangeLayer() {
 }
 
 
-function LimparLegenda(Legenda) {
-	document.getElementById(Legenda).innerHTML = '';
+function MakeMapControls(Links) {
+	$("#map-controls-group").html(Links);
 }
 
 
-function ComporLegenda(LegendaId, Conteudo) {
-	var Elem = document.getElementById(LegendaId);
-	Elem.innerHTML = Conteudo;	
-}
-
-
-function ItemLegenda(Dados) {
-	return " <div class='itemlegenda arredondar'>"+ Dados +"</div> ";
-}
-
-function AtualizarLegenda(Legenda) {
-	
+function AtualizarControlesDoMapa() {
 	//pega coordenadas
 	var Cnt = map.getCenter();
 	var Lat = Cnt.lat;
@@ -94,29 +99,28 @@ function AtualizarLegenda(Legenda) {
 	PreLinkOSMd      = GetLinkOSMd(Lat,Lon);
 	PreLinkLast90    = GetLinkLast90Edits(Lat,Lon);
 	
-	LinkOSMR      = ItemLegenda(HrefFromURLPlus(PreLinkOSMR,"Como chegar até aqui","Como chegar",LinksAlvo));
-	LinkMapillary = ItemLegenda(HrefFromURLPlus(PreLinkMapillary,"Fotos e streetview","Streetview",LinksAlvo));
-	LinkF4Map  = ItemLegenda(HrefFromURLPlus(PreLinkF4Map,"Veja em 3D","Em 3D",LinksAlvo));
-	LinkEcoMap = ItemLegenda(HrefFromURLPlus(PreLinkEcoMap,"Mapa ecológico","Mapa ecológico",LinksAlvo));
-	LinkOSMe   = ItemLegenda(HrefFromURLPlus(PreLinkOSMe,"Edite este mapa","Editar mapa",LinksAlvo));
-	LinkLast90 = ItemLegenda(HrefFromURLPlus(PreLinkLast90,"Edições nos últimos 90 dias","Ver edições",LinksAlvo));
-	LinkOSMd   = ItemLegenda(HrefFromURLPlus(PreLinkOSMd,"Detalhes sobre os dados: Histórico, autores, etc","Ver dados",LinksAlvo));
-
-	LinkPrint  = ItemLegenda(HrefFromURLPlus('#',"Imprimir","Imprimir <small>(em breve)</small>"));
-	
-	LinksLegenda = LinkOSMR + LinkMapillary + LinkF4Map + LinkEcoMap + LinkOSMe + LinkLast90 + LinkOSMd + LinkPrint 
-					+ MapLegendTitle;
-
-	ComporLegenda(Legenda,LinksLegenda);
+	LinkOSMR      = HrefFromURLPlus(PreLinkOSMR,"icon l-r-arrow","Como chegar até aqui","",LinksAlvo);
+	LinkMapillary = HrefFromURLPlus(PreLinkMapillary,"icon street","Fotos e streetview","",LinksAlvo);
+	LinkF4Map  = HrefFromURLPlus(PreLinkF4Map,"icon mt","Veja em 3D","",LinksAlvo);
+	LinkEcoMap = HrefFromURLPlus(PreLinkEcoMap,"icon landuse","Mapa ecológico","",LinksAlvo);
+	LinkOSMe   = HrefFromURLPlus(PreLinkOSMe,"icon pencil","Edite este mapa","",LinksAlvo);
+	LinkLast90 = HrefFromURLPlus(PreLinkLast90,"icon history","Edições nos últimos 90 dias","",LinksAlvo);
+	LinkOSMd   = HrefFromURLPlus(PreLinkOSMd,"icon inspect","Dados do mapa","",LinksAlvo);
 
 	PreLinkNote      = GetLinkNote(Lat,Lon); 
-	LinkNote   = HrefFromURLPlus(PreLinkNote,"Localizou um erro ou algo faltando? Informe pra gente :).","Falta algo? Adicione uma nota",LinksAlvo);
+	LinkNote   = HrefFromURLPlus(PreLinkNote,"icon big contact","Localizou um erro ou algo faltando? Informe pra gente :)","",LinksAlvo);
+
+	LinkPrint  = HrefFromURLPlus("#","icon printer","Imprimir","Imprimir <small>(em breve)</small>");
 	
-	if (MapNotesPrev.length > 0) { 	
-      legendNotes.removeLegend(MapNotesPrev);
-	}
-	MapNotesPrev = "<div class='map-notes-icon'>+</div>" + LinkNote;
-	legendNotes.addLegend(MapNotesPrev);
+	LinksLegenda = LinkOSMR + " " + LinkMapillary + " " + LinkF4Map + " " + LinkEcoMap + " " + LinkOSMe + " " + LinkLast90 + " " + LinkOSMd + " " + LinkNote; // + " " + LinkPrint;
+
+	
+	MakeMapControls(LinksLegenda);
+//	if (MapNotesPrev.length > 0) { 	
+//      legendNotes.removeLegend(MapNotesPrev);
+//	}
+//	MapNotesPrev = "<div class='map-notes-icon'>✚</div>" + LinkNote;
+//	legendNotes.addLegend(MapNotesPrev);
 	  	
 }
 
@@ -220,25 +224,31 @@ var Escala = L.control.scale({
 Escala.addTo(map);
 
 
-		map.on('overlayadd', function(e) {
-			 AttrIfLayerIsOn( layer_Mapillary, attrMapillary );		     
-			 AttrIfLayerIsOn( layer_MMA, attrMMA );		     
-			 AttrIfLayerIsOn( layer_Microbacias, attrPrefMRG );		     
-		 });
-		map.on('overlayremove', function(e) {
-			 AttrIfLayerIsOn( layer_Mapillary, attrMapillary );		     
-			 AttrIfLayerIsOn( layer_MMA, attrMMA );		     
-			 AttrIfLayerIsOn( layer_Microbacias, attrPrefMRG );		     
-		 });
+map.on('overlayadd', function(e) {
+	 AttrIfLayerIsOn( layer_Mapillary, attrMapillary );		     
+	 AttrIfLayerIsOn( layer_MMA, attrMMA );		     
+	 AttrIfLayerIsOn( layer_Microbacias, attrPrefMRG );		     
+ });
+map.on('overlayremove', function(e) {
+	 AttrIfLayerIsOn( layer_Mapillary, attrMapillary );		     
+	 AttrIfLayerIsOn( layer_MMA, attrMMA );		     
+	 AttrIfLayerIsOn( layer_Microbacias, attrPrefMRG );		     
+ });
 
 
-		AtualizarLegenda('map-legend-btn');			
-		map.on('moveend', function(e) {
-			AtualizarLegenda('map-legend-btn');					
-		});	
+AtualizarControlesDoMapa();			
+map.on('moveend', function(e) {
+	AtualizarControlesDoMapa();					
+});	
 
-		refreshMapillary();
-		map.on('dragend', function(e) {
-			refreshMapillary();					
-		});	
-										
+refreshMapillary();
+map.on('dragend', function(e) {
+	refreshMapillary();					
+});	
+
+//thanks to http://jsfiddle.net/3fdCD/ from http://stackoverflow.com/questions/22119535/having-trouble-with-leaflet-removelayer
+$("#map-select-layer").change(function() {
+	var Opcao = $("#map-select-layer option:selected").val();
+	ChangeLayer(Opcao);			
+});
+

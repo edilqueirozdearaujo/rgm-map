@@ -10,10 +10,12 @@
 
 	//--------------------------------------------------------
 	//Database
+/*
 	define("cDBHost","");
 	define("cDBName","");
 	define("cDBUser","");
 	define("cDBPass","");
+*/
 
 
 

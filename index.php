@@ -16,14 +16,7 @@ include_once "include/proc.php";
 //======= Only for this page
 	$MinhaURL 	   = $_SERVER['PHP_SELF'];
 	$MinhaURL = NoIndexPHP($MinhaURL);	
-	$SessionName = 'mapa-regional';	
-	
-	$ErrosNaPagina = "";
-	function TryShowError($ErrorStr) {
-		if( !Vazio($ErrorStr) ) {
-			Linha ("<p class='showerror'><b>$ErrorStr</b></p>");		
-		} 
-	}
+	$SessionName = 'rgm-map';	
 	
 
 //======= Pre-process
@@ -34,7 +27,6 @@ include_once "include/proc.php";
 	$SemErro = FALSE;
 	$SemErro = SecSessionStart($SessionName,TRUE);
 	if( !$SemErro ) {	$SemErro = SecSessionStart($SessionName,FALSE);}	
-	if( !$SemErro ) {	AddMsg("ErrSessStart",$ErrosNaPagina); session_start($SessionName);}	
 
 	$IsMobileBrowser = IsMobileBrowser();
 
@@ -105,6 +97,7 @@ include_once "include/proc.php";
 	<!-- Mapbox  -->
 	<script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.js'></script>
 	<link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.css' rel='stylesheet' />	
+	<link href='//mapbox.com/base/latest/base.css' rel='stylesheet' />
 
 	<!-- Mapbox Leaflet Locate plugin  -->
 	<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.24.0/L.Control.Locate.js'></script>
@@ -121,41 +114,10 @@ include_once "include/proc.php";
 	<link rel="stylesheet" href="css/OverPassLayer.css" />
 	<script src="include/OverPassLayer.js"></script>	
 
+	<script src="include/jquery.min.js" ></script>
 	<script src='include/leafletrout.js'></script>
 </head>
 <body>
-	<div id='map-legend'>
-			<div id='map-legend-btn'></div>
-
-			<div id='select-baselayers'>	
-				Estilo de Mapa:
-		      <select id='select-layer' name='select-layer' onChange='ChangeLayer();' >  
-		           <option id='lMNK' value='lMNK' >OpenStreetMap</option>  
-		           <option id='lMKG' value='lMKG' >OSM Tons de cinza</option>  
-		           <option id='lMBL' value='lMBL' >Light Mapbox</option>  
-		           <option id='lMBD' value='lMBD' >Dark Mapbox</option>
-		           <option id='lOTD' value='lOTD' >Ar livre</option>
-		           <option id='lMBO' value='lMBO' >Ar livre Mapbox</option>
-		           <option id='lCYL' value='lCYL' >Ciclistas</option>
-		           <option id='lMBB' value='lMBB' >Bike</option>
-		           <option id='lMBP' value='lMBP' >Lápis</option>
-		           <option id='lMBC' value='lMBC' >Comic</option>
-		           <option id='lMBR' value='lMBR' >Piratas</option>
-		           <option id='lSTW' value='lSTW' >Aquarela</option>
-		           <option id='lSTL' value='lSTL' >Toner Light</option>
-		           <option id='lSTT' value='lSTT' >Toner Dark</option>
-		           <option id='lMBW' value='lMBW' >Poster Lambe-lambe</option>
-		           <option id='lMBS' value='lMBS' >Satélite Mapbox</option>
-		           <option id='lESR' value='lESR' >Satélite lESR</option>
-		           <option id='lIBR' value='lIBR' >IBGE Rural</option>
-		           <option id='lIBU' value='lIBU' >IBGE Urbano</option>
-		      </select>
-			</div>
-
-			<div id='map-legend-title'>
-				<a href='http://projetorgm.com.br/'><h3>Mapa do RGM</h3></a> <small>[beta]</small> | <a href='https://github.com/edilqueirozdearaujo/rgm-map'><b>Código fonte</b></a> | <a href='about.php'><b>Sobre</b></a>			
-			</div>
-	</div>
 	<div id='geocode-selector'></div>
 	<div id='mapdiv'></div>
 	
@@ -211,5 +173,11 @@ include_once "include/proc.php";
 
 		Linha("	</script>");
 	?>	
+	
+	
+	<script>
+	  
+	</script>
+	
 </body>
 </html>

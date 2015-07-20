@@ -1,22 +1,6 @@
 #mapdiv{
-   height: 90%;
+   height: 100%;
    width: 100%;
-}
-
-#map-legend{
-   height: auto;
-   width: 100%;
-   background-color: #4D4D4D;
-   color: #E5E5E5;
-   overflow: hidden;
-   border-bottom: solid 1px #BFBFBF;
-   padding-bottom: 2px;
-}
-
-
-#map-legend a{
-	color: #4D4D4D;
-	text-decoration: none;
 }
 
 
@@ -36,45 +20,6 @@
 #select-baselayers, #map-legend-title, #map-legend-btn{
 	display: inline-table;
 	vertical-align: middle;
-}
-
-#map-legend-title{
-	margin-left: 7px;
-	padding: 4px;
-	color: #E5E5E5;
-}
-#map-legend-title, #map-legend-title h3, #map-legend-title b{
-	display: inline-table;
-	vertical-align: middle;
-	margin: 0;
-	padding: 0;
-	color: #E5E5E5;
-}
-#map-legend-title a{
-	color: #E5E5E5;	
-}
-
-
-
-.itemlegenda{
-	display: inline-table;
-	padding: 2px;
-	
-	margin-right: 2px;
-	margin-left: 2px;
-	margin-top: 3px;
-	
-	border-bottom: solid 1px #BFBFBF;	
-	border-left: solid 1px #ffffff;
-	border-right: solid 1px #ffffff;
-	background-color: #efefef;
-	color: #4D4D4D;	
-	
-	font-size: 11px;
-}
-
-.itemlegenda a:hover{
-  background-color: #ffffff;
 }
 
 
