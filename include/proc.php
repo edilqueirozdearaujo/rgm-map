@@ -2,6 +2,11 @@
 
  define("cSiteRGM","<a href='https://projetorgm.com.br/'><img class='alinhar-vertical' src='imagens/favicon.png' width='32px' /> projetorgm.com.br</a>");
 
+//MAP OPTIONS ------------------------------------------------------------------------------------------ 
+$MapSetView["Lat"] = "-24.1267";
+$MapSetView["Lon"] = "-48.3721";
+$MapSetView["Zoom"] = "10";
+
 function IsValidLayer($Test){
 	$IsLayer = FALSE;
 	$Test = $Test . ",";
@@ -23,7 +28,7 @@ function IsValidLayer($Test){
 function IsValidOverlay($Test){
 	$IsLayer = FALSE;
 	$Test = $Test . ",";
-	$Layers = "Mapillary,ALIM,ACOM,ACOM,TURI,TRSP,NASC,UTIL,MPLL,";
+	$Layers = "Mapillary,ALIM,ACOM,ACOM,TURI,TRSP,NASC,UTIL,MPLL,MMA,MBH,";
 	if( StrPosicao($Test,$Layers) > 0 ) {
 		$IsLayer = TRUE;
 	} 
@@ -31,13 +36,58 @@ function IsValidOverlay($Test){
 }
 
 
-function ItemDivNav($Texto) {
-		Linha("<div id='navegacao_horizontal' class='caixas-arredondadas'>");	
-		Linha($Texto);
-		Linha("</div>");
+//Escreve um trecho javascript que define o mapa de fundo
+function TrySetBaseLayer($SetBaseLayer) {
+	if( IsValidLayer($SetBaseLayer) ) {
+			Linha("		//Layer padrão modificada por URL");	
+		 	Linha("		RmBaseLayers(); //first, remove all baselayers"); 				 					 	
+		 	Linha("		map.addLayer(l".$SetBaseLayer.");");
+		 	Linha("		document.getElementById('l".$SetBaseLayer."').selected = true;");				 	
+	}
+}
+
+function LoadMapSetView($Dados) {
+	global $MapSetView;
+	$XYZ = explode("/", $Dados);	
+	$MapSetView["Lat"]  = $XYZ[1];
+	$MapSetView["Lon"]  = $XYZ[2];
+	$MapSetView["Zoom"] = $XYZ[0];
+}
+
+//Escreve um trecho javascript que define coordenadas e zoom do mapa
+function TryMapSetView() {
+	global $MapSetView;	
+	Linha ("		map.setView([".$MapSetView["Lat"].",".$MapSetView["Lon"]."], ".$MapSetView["Zoom"].");");
 }
 
 
+function ProcessarOverlays($OvlBruta,&$Resultado) {
+	$SemErro = FALSE;
+	if (!Vazio($OvlBruta)) {
+		$OverlaysArr = explode(";",$OvlBruta);
+		$Resultado = $OverlaysArr;
+		$SemErro = TRUE;
+	}
+	return $SemErro;
+}
+
+function MostrarOverlays($SetOverlay) {
+	foreach($SetOverlay as &$OvlTemp ){
+		if( IsValidOverlay($OvlTemp) ) {
+				Linha("		//Overlay adicionada por URL");
+			 	Linha("		map.addLayer(ol".$OvlTemp.");");
+			 	switch($OvlTemp) {
+			 		case "MMA": Linha("		ControlLayers.addOverlay(ol".$OvlTemp.", 'MMA');"); 
+			 		break;
+			 		case "MBH": Linha("		ControlLayers.addOverlay(ol".$OvlTemp.", 'Microbacias');"); 
+			 		break;
+			 	}
+		}				
+	}									
+}
+
+
+//HTML OPTIONS ------------------------------------------------------------------------------------------ 
 
 function DrawHeader($MinhaURL) {
 	Linha("<div class='header alinhar-direita'>");
@@ -71,11 +121,13 @@ function GetIDURL($MinhaURL,$ID) {
 	return cDominioFullURLSSL . $MinhaURL."?id=".$ID;	
 }
 
+//Isto limpará todas variáveis criadas para seção
 function ClearVars() {
-// 	 if( isset($_SESSION['CalendarioTipoEscolhido']) ) { unset($_SESSION['CalendarioTipoEscolhido']); }
  	 if( isset($_SESSION['CustomLayer']) ) { unset($_SESSION['CustomLayer']); }
 }
 
+
+//SHARE OPTIONS ------------------------------------------------------------------------------------------ 
 
 function TwitterShare($URL) {
 	Linha("		");

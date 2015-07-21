@@ -1,4 +1,5 @@
 var	MapboxAccessToken = "";  //your-Mapbox-Access-Token  -> Learn more: https://www.mapbox.com/mapbox.js/
+L.mapbox.accessToken   = MapboxAccessToken;
 
 var Sep = ' | ';
 var attrOSM         = '<a href="http://www.openstreetmap.org/copyright" title="Termos e condições" >contribuidores do OpenStreetMap</a>'; 
@@ -26,9 +27,8 @@ var layer_StamenWater  = L.tileLayer('http://{s}.tile.stamen.com/watercolor/{z}/
 var layer_StamenToner  = L.tileLayer('http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.jpg', {attribution: attrStamen} ); 
 var layer_StamenTonerL = L.tileLayer('http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.jpg', {attribution: attrStamen} ); 
 
-L.mapbox.accessToken   = MapboxAccessToken;
-var layer_MMA          = L.mapbox.featureLayer('edilqueirozdearaujo.l55cf7ad');
-var layer_Microbacias  = L.mapbox.featureLayer('edilqueirozdearaujo.l54c2k79');
+var olMMA          = L.mapbox.featureLayer('edilqueirozdearaujo.l55cf7ad');
+var olMBH          = L.mapbox.featureLayer('edilqueirozdearaujo.l54c2k79');
 
 var layer_MapboxComic    = L.mapbox.tileLayer('projetorgm.lo6iii9m');
 var layer_MapboxStreets  = L.mapbox.tileLayer('projetorgm.lo6jai4e');
@@ -65,8 +65,8 @@ var lMBP = layer_MapboxPencil;
 //       ******************************************************************
 
 
-var layer_Mapillary    = L.mapbox.featureLayer();
-	layer_Mapillary.on('layeradd', function(e) {
+var olMPLL    = L.mapbox.featureLayer();
+	olMPLL.on('layeradd', function(e) {
         e.layer.bindPopup('<img width="128px" src="' + e.layer.feature.properties.image + '" />', {
             minWidth: 132
         });
@@ -74,7 +74,7 @@ var layer_Mapillary    = L.mapbox.featureLayer();
 
 
 function refreshMapillary() {
-	if ( map.hasLayer( layer_Mapillary )) {
+	if ( map.hasLayer( olMPLL )) {
 			var Box = map.getBounds();
 			var SOUTH = Box.getSouth();
 			var NORTH = Box.getNorth();
@@ -88,7 +88,7 @@ function refreshMapillary() {
 					'&max-lon=' + EAST +
 					'&max-results=85&geojson=true';	
 
-			layer_Mapillary.loadURL(MapillarySearch);		
+			olMPLL.loadURL(MapillarySearch);		
 	}
 }	
 

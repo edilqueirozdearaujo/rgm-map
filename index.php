@@ -1,4 +1,7 @@
 <?
+	error_reporting(1);
+	ini_set("display_errors", 1 );
+
 // Projeto RGM
 // 
 //
@@ -33,7 +36,6 @@ include_once "include/proc.php";
 	// (geralmente, a primeira visita ao site)
 	if( !isset($_SESSION['Lang']) || !isset($_SESSION['Country'])) {
 	   $_SESSION['Lang']    = "pt";
-	   $_SESSION['Country'] = "BR"; 
 	}
 	SetLanguage($_SESSION['Lang']);	
 
@@ -49,7 +51,9 @@ include_once "include/proc.php";
 /* elseif (...) {
  }*/
  
- 
+/* 
+//desativando suporte por URLs
+
  //Baselayer foi escolhida por URL?
  if (filter_has_var(INPUT_GET,'layer')) {
  	   $SetBaseLayer = filter_input(INPUT_GET,'layer',FILTER_SANITIZE_STRING);
@@ -67,13 +71,29 @@ include_once "include/proc.php";
  	   	$CustomOverLay = $ArrCustomOverLay; 	   	 	   
  	   }
  }
-
+*/
  if (filter_has_var(INPUT_GET,'id')) {
  	 $MapID = filter_input(INPUT_GET,'id',FILTER_SANITIZE_STRING);
- 	 $Mapa = SearchByID($MapID); 
+ 	 $Mapa = SearchByID($MapID);
 	 if ( $Mapa !== FALSE ){
-			$MapaAtributos = $Mapa;  
+			$MapaAtributos = $Mapa;
+			LoadMapSetView($MapaAtributos['XYZ']);			
+			
+			if( !Vazio($MapaAtributos['Titulo'])) { $SetMapTitulo = $MapaAtributos['Titulo'];}
+
+			if( !Vazio($MapaAtributos['B'])) { $SetBaseLayer = $MapaAtributos['B'];	}
+
+			if(ProcessarOverlays($MapaAtributos['O'],$OvlTemp)){ $SetOverlay = $OvlTemp;}			
+			
+			if( !Vazio($MapaAtributos['MB'])) {
+		 	   $TempCustomOverLay = $MapaAtributos['MB'];
+		 	   $ArrCustomOverLay = explode(",",$TempCustomOverLay);
+		 	   if( count($ArrCustomOverLay) == 2 ) {	//2 parâmetros... OK?
+		 	   	$CustomOverLay = $ArrCustomOverLay; 	   	 	   
+		 	   }
+			}
 	 }
+
  }
 
 ?>
@@ -84,8 +104,8 @@ include_once "include/proc.php";
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
    <?	
-       if( isset( $MapaAtributos ) ) {
-           Linha("	<title>" . $MapaAtributos['Titulo'] . " | " .  GetMsg('SiteTitle')." </title>");
+       if( isset( $SetMapTitulo ) ) {
+           Linha("	<title>" . $SetMapTitulo . " | " .  GetMsg('SiteTitle')." </title>");
        }else{ 
            Linha("	<title>".GetMsg('SiteTitle')." </title>");
        }     
@@ -120,36 +140,27 @@ include_once "include/proc.php";
 <body>
 	<div id='geocode-selector'></div>
 	<div id='mapdiv'></div>
+
+	<?
+		Linha("<script>");		
+		Linha("		var map = L.mapbox.map('mapdiv'); //Cria o mapa");
+		TryMapSetView(); //Para evitar o erro:  "Error: Set map center and zoom first"
+		Linha("		var MapHash = L.hash(map);");
+		Linha("</script>");		
+	?>
 	
 	<script src='include/proc.js'></script>
 
 	<?
-		Linha("<script>");
+		Linha("<script>");		
 		//Layer foi especificada por URL?
-		if( isset($SetBaseLayer) ) {
-			if( IsValidLayer($SetBaseLayer) ) {
-					Linha("		//Layer padrão modificada por URL");	
-				 	Linha("		RmBaseLayers(); //first, remove all baselayers"); 				 					 	
-				 	Linha("		map.addLayer(".$SetBaseLayer.");");
-				 	Linha("		document.getElementById('".$SetBaseLayer."').selected = true;");				 	
-			}
-		}
+		if( isset($SetBaseLayer) ) { TrySetBaseLayer($SetBaseLayer);}
 
-		//Overlay foi especificada por URL?
+		//Overlay foi especificada?
 		Linha(" ");
-		if( isset($SetOverlay) ) {
-			$Total = count($SetOverlay);
-//			Linha("		window.alert('$Total')");
-			for( $Cont = 0; $Cont < $Total; $Cont++ ) {
-					if( $SetOverlay[$Cont] == "Mapillary" ) { $SetOverlay[$Cont] = "MPLL"; } //Fix
-					if( IsValidOverlay($SetOverlay[$Cont]) ) {
-							Linha("		//Overlay adicionada por URL");
-						 	Linha("		map.addLayer(ol".$SetOverlay[$Cont].");");
-					}
-			}			
-		}
+		if( isset($SetOverlay) ) { MostrarOverlays($SetOverlay); }
 
-		//OverLayer foi especificada por URL?
+		//Existe OverLayer customizada?
 		Linha(" ");
 		if( isset($CustomOverLay) ) {
 					Linha("		//Layer personalizada");
@@ -165,9 +176,8 @@ include_once "include/proc.php";
       	$RGMGo = "http://projetorgm.com.br/?go=";
       	$RGMGoNick = $RGMGo . $MapaAtributos['Nick']; 
       	$RGMGoNick = "<small><a href='".$RGMGoNick."'>LINK</a></small>";
-      	$LinkMapboxMapa = "<small><a href='https://a.tiles.mapbox.com/v4/".$LayerMapBox."/page.html?access_token=pk.eyJ1IjoicHJvamV0b3JnbSIsImEiOiJqeVpremF3In0.SCxZ4ah9ZKxWcELgsKQyWA'>VER NO MAPBOX</a></small>";
       	
-      	$Legenda = "<p><b>". $MapaAtributos['Titulo'] ."</b></p><p>". $MapaAtributos['Descricao'] ."</p>" . $RGMGoNick . " | " . $LinkMapboxMapa;
+      	$Legenda = "<p><b>". $MapaAtributos['Titulo'] ."</b></p><p>". $MapaAtributos['Descricao'] ."</p>" . $RGMGoNick;
 			Linha("		map.legendControl.addLegend(\"".$Legenda."\");");
 		}
 

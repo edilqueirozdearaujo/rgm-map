@@ -32,7 +32,7 @@ if ( MapaEmbutido ) {
   LinksAlvo = '_parent';  
 }
 
-var map = L.mapbox.map('mapdiv'); //Cria o mapa
+//var map = L.mapbox.map('mapdiv'); //Cria o mapa DEPRECATED
 
 //var legendNotes = new L.mapbox.LegendControl();
 var ControlesDoMapa = new L.mapbox.LegendControl({collapsed :true, position: 'topright'});
@@ -148,15 +148,15 @@ var BaseLayers = {
 };	
 
 var Overlays = {		
-   // 'Unidades de Conservação'  : layer_MMA,
-   'Fotos do Mapillary'       : layer_Mapillary
-   // 'Microbacias Hidrográficas' : layer_Microbacias
+   // 'Unidades de Conservação'  : olMMA,
+   'Fotos do Mapillary'       : olMPLL
+   // 'Microbacias Hidrográficas' : olMBH
 };	
 
-var ControlLayers = L.control.layers( BaseLayers, Overlays, {position: 'topright', collapsed: true});
+//Para evitar o erro:  "Error: Set map center and zoom first"
+//map.setView([-24.1267,-48.3721], 10);DEPRECATED 
 
-//Caso a URL inicial do mapa não tenha coordenadas
-map.setView([-24.1267,-48.3721], 10); 
+var ControlLayers = L.control.layers( BaseLayers, Overlays, {position: 'topright', collapsed: true});
 
 //OverPassAPI overlay
 map.attributionControl.addAttribution(attrOverPass);
@@ -186,7 +186,7 @@ var layer_oplLixo = new L.OverPassLayer({
 });
 
 
-var olMPLL = layer_Mapillary;
+var olMPLL = olMPLL;
 var olALIM = layer_oplAlimentacao;
 var olACOM = layer_oplAcomodacao;
 var olACOM = layer_oplAcomodacao;
@@ -214,8 +214,7 @@ var ControlGeocoder = new L.Control.geocoder({
 });
 ControlGeocoder.addTo(map);
 
-var MapHash = L.hash(map);
-		
+// var MapHash = L.hash(map);		DEPRECATED
 //map.addControl(L.mapbox.shareControl());
 
 var Escala = L.control.scale({
@@ -225,14 +224,14 @@ Escala.addTo(map);
 
 
 map.on('overlayadd', function(e) {
-	 AttrIfLayerIsOn( layer_Mapillary, attrMapillary );		     
-	 AttrIfLayerIsOn( layer_MMA, attrMMA );		     
-	 AttrIfLayerIsOn( layer_Microbacias, attrPrefMRG );		     
+	 AttrIfLayerIsOn( olMPLL, attrMapillary );		     
+	 AttrIfLayerIsOn( olMMA, attrMMA );		     
+	 AttrIfLayerIsOn( olMBH, attrPrefMRG );		     
  });
 map.on('overlayremove', function(e) {
-	 AttrIfLayerIsOn( layer_Mapillary, attrMapillary );		     
-	 AttrIfLayerIsOn( layer_MMA, attrMMA );		     
-	 AttrIfLayerIsOn( layer_Microbacias, attrPrefMRG );		     
+	 AttrIfLayerIsOn( olMPLL, attrMapillary );		     
+	 AttrIfLayerIsOn( olMMA, attrMMA );		     
+	 AttrIfLayerIsOn( olMBH, attrPrefMRG );		     
  });
 
 

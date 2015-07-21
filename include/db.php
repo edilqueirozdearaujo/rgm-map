@@ -48,7 +48,7 @@ function SearchByID($ID) {
 	$Res = DBServerConnect();
 	if( DBIsConnected($Res)) {
 		if (DBSelect(cDBName)){
-			$SQL = "SELECT * FROM RGMGoTo WHERE ID = $IDInt LIMIT 1;";
+			$SQL = "SELECT * FROM RGMMap WHERE ID = $IDInt LIMIT 1;";
 
 			$ExeSQL = mysql_query($SQL);
 			if( MySQLResults($ExeSQL) > 0 ) {
