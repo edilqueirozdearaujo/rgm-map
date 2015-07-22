@@ -32,10 +32,7 @@ if ( MapaEmbutido ) {
   LinksAlvo = '_parent';  
 }
 
-//var map = L.mapbox.map('mapdiv'); //Cria o mapa DEPRECATED
-
-//var legendNotes = new L.mapbox.LegendControl();
-var ControlesDoMapa = new L.mapbox.LegendControl({collapsed :true, position: 'topright'});
+var ControlesDoMapa = new L.mapbox.LegendControl({position: 'topright'});
 ControlesDoMapa.addTo(map);
 ControlesDoMapa.addLegend(MapBaseLayersSelect); //A seleção das camadas do mapa não devem ser mudadas ao mover o mapa
 
@@ -84,7 +81,6 @@ function MakeMapControls(Links) {
 	$("#map-controls-group").html(Links);
 }
 
-
 function AtualizarControlesDoMapa() {
 	//pega coordenadas
 	var Cnt = map.getCenter();
@@ -108,7 +104,7 @@ function AtualizarControlesDoMapa() {
 	LinkOSMd   = HrefFromURLPlus(PreLinkOSMd,"icon inspect","Dados do mapa","",LinksAlvo);
 
 	PreLinkNote      = GetLinkNote(Lat,Lon); 
-	LinkNote   = HrefFromURLPlus(PreLinkNote,"icon big contact","Localizou um erro ou algo faltando? Informe pra gente :)","",LinksAlvo);
+	LinkNote   = HrefFromURLPlus(PreLinkNote,"icon contact","Localizou um erro ou algo faltando? Informe pra gente :)","",LinksAlvo);
 
 	LinkPrint  = HrefFromURLPlus("#","icon printer","Imprimir","Imprimir <small>(em breve)</small>");
 	
@@ -116,50 +112,15 @@ function AtualizarControlesDoMapa() {
 
 	
 	MakeMapControls(LinksLegenda);
-//	if (MapNotesPrev.length > 0) { 	
-//      legendNotes.removeLegend(MapNotesPrev);
-//	}
-//	MapNotesPrev = "<div class='map-notes-icon'>✚</div>" + LinkNote;
-//	legendNotes.addLegend(MapNotesPrev);
-	  	
 }
 
 
-
 //Default layer to show
-layer_mapnik.addTo(map);  
+lMNK.addTo(map);  
 
-var BaseLayers = {
-//DEPRECATED
-/*    
-    'OpenStreetMap': layer_mapnik,
-    'Light'        : layer_MapboxLight,
-    'Dark'         : layer_MapboxDark,
-    'Ar livre'     : layer_MapboxOutdoors,  
-    'Poster Lambe-lambe'    : layer_MapboxWheatpaste,    
-    'Comic'        : layer_MapboxComic,
-    'Lápis'        : layer_MapboxPencil,
-    'Toner'        : layer_StamenTonerL,
-    'Satélite'     : layer_MapboxStreets,
-    'Satélite ESRI': layer_ESRI,
-    'IBGE Rural'   : layer_IBGEr,
-    'IBGE Urbano'  : layer_IBGEu
-*/    
-};	
-
-var Overlays = {		
-   // 'Unidades de Conservação'  : olMMA,
-   'Fotos do Mapillary'       : olMPLL
-   // 'Microbacias Hidrográficas' : olMBH
-};	
-
-//Para evitar o erro:  "Error: Set map center and zoom first"
-//map.setView([-24.1267,-48.3721], 10);DEPRECATED 
-
+var BaseLayers = {};	
+var Overlays = {'Fotos do Mapillary'       : olMPLL};	
 var ControlLayers = L.control.layers( BaseLayers, Overlays, {position: 'topright', collapsed: true});
-
-//OverPassAPI overlay
-map.attributionControl.addAttribution(attrOverPass);
 
 var layer_oplAlimentacao = new L.OverPassLayer({
 	   query: "( node(BBOX)['amenity'='cafe']; node(BBOX)['amenity'='fast_food'];  node(BBOX)['amenity'='restaurant']; node(BBOX)['amenity'='ice_cream']; );out;"
@@ -189,12 +150,10 @@ var layer_oplLixo = new L.OverPassLayer({
 var olMPLL = olMPLL;
 var olALIM = layer_oplAlimentacao;
 var olACOM = layer_oplAcomodacao;
-var olACOM = layer_oplAcomodacao;
 var olTURI = layer_oplTurismo;
 var olTRSP = layer_oplTransporte;
 var olUTIL = layer_oplBasicos;
 var olNASC = layer_oplNasc;
-
 
 ControlLayers.addOverlay(olALIM, 'Onde se alimentar?');
 ControlLayers.addOverlay(olACOM, 'Onde dormir?');				
@@ -214,7 +173,6 @@ var ControlGeocoder = new L.Control.geocoder({
 });
 ControlGeocoder.addTo(map);
 
-// var MapHash = L.hash(map);		DEPRECATED
 //map.addControl(L.mapbox.shareControl());
 
 var Escala = L.control.scale({
@@ -222,17 +180,28 @@ var Escala = L.control.scale({
 });				
 Escala.addTo(map);
 
+function CheckOverpassLayers() {
+	if ( map.hasLayer(olALIM) || map.hasLayer(olACOM) || map.hasLayer(olTURI) || map.hasLayer(olTRSP)|| map.hasLayer(olUTIL) || map.hasLayer(olNASC) ) {			
+	     map.attributionControl.addAttribution(attrOverPass);
+	}else {
+	     map.attributionControl.removeAttribution(attrOverPass);
+	}
+}
 
 map.on('overlayadd', function(e) {
 	 AttrIfLayerIsOn( olMPLL, attrMapillary );		     
 	 AttrIfLayerIsOn( olMMA, attrMMA );		     
-	 AttrIfLayerIsOn( olMBH, attrPrefMRG );		     
+	 AttrIfLayerIsOn( olMBH, attrPrefMRG );
+	 CheckOverpassLayers();
  });
 map.on('overlayremove', function(e) {
 	 AttrIfLayerIsOn( olMPLL, attrMapillary );		     
 	 AttrIfLayerIsOn( olMMA, attrMMA );		     
-	 AttrIfLayerIsOn( olMBH, attrPrefMRG );		     
+	 AttrIfLayerIsOn( olMBH, attrPrefMRG );
+	 CheckOverpassLayers();		     
  });
+   
+
 
 
 AtualizarControlesDoMapa();			

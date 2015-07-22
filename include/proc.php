@@ -11,13 +11,8 @@ function IsValidLayer($Test){
 	$IsLayer = FALSE;
 	$Test = $Test . ",";
 
-//	$Layers = "mapnik,OSMbw,outdoors,cycle,ESRI,IBGEr,IBGEu,MapBox,StamenWater,StamenToner,StamenTonerL"
-//			  . ",MapboxComic,MapboxStreets,MapboxLight,MapboxDark,MapboxOutdoors,MapboxPirates,MapboxWheatpaste,MapboxBike,MapboxPencil";
-	
-	
 	$Layers = "lMNK,lMKG,lOTD,lCYL,lESR,lIBR,lIBU,lSTW,lSTT,lSTL,lMBC,lMBS,lMBL,lMBD,lMBO,lMBP,lMBW,lMBB,lMBR,";
 	
-	//Novas layers aqui!!!!!!!!!!!!!!!! //
 	if( StrPosicao($Test,$Layers) > 0 ) {
 		$IsLayer = TRUE;
 	} 
@@ -71,6 +66,26 @@ function ProcessarOverlays($OvlBruta,&$Resultado) {
 	return $SemErro;
 }
 
+//Cada overlay Mapbox é um array de chave/id e título
+function ProcessarOverlaysMB($OvlBruta,&$Resultado) {
+	$SemErro = FALSE;
+	if (!Vazio($OvlBruta)) {
+		$OverlaysArr = explode(";",$OvlBruta);
+		foreach( $OverlaysArr as &$CadaLMB ){
+		 	   $ArrCadaLMB = explode(",",$CadaLMB);
+		 	   if( count($ArrCadaLMB) == 2 ) {	//2 parâmetros... OK?
+		 	   	$OverLaysMB[] = $ArrCadaLMB;
+		 	   	$SemErro = TRUE; 	   	 	   
+		 	   }
+		}
+
+		$Resultado = $OverLaysMB;
+		$SemErro = TRUE;
+	}
+	return $SemErro;
+}
+
+
 function MostrarOverlays($SetOverlay) {
 	foreach($SetOverlay as &$OvlTemp ){
 		if( IsValidOverlay($OvlTemp) ) {
@@ -85,6 +100,22 @@ function MostrarOverlays($SetOverlay) {
 		}				
 	}									
 }
+
+
+function MostrarOverlaysMB($SetOverlay) {
+	Linha("		//Layers mapbox");
+	foreach($SetOverlay as &$OvlTemp ){
+		$MBID    = $OvlTemp[0];		 
+		$MBTitle = $OvlTemp[1];		
+		$MBName =  TrocarCaractere($MBID,".","_" ); 
+		
+	 	Linha("		var $MBName        = L.mapbox.featureLayer('$MBID');"); 
+	 	Linha("		ControlLayers.addOverlay($MBName, '$MBTitle');");
+	 	Linha("		map.addLayer($MBName);");
+					
+	}									
+}
+
 
 
 //HTML OPTIONS ------------------------------------------------------------------------------------------ 

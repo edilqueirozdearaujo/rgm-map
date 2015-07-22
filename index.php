@@ -76,22 +76,33 @@ include_once "include/proc.php";
  	 $MapID = filter_input(INPUT_GET,'id',FILTER_SANITIZE_STRING);
  	 $Mapa = SearchByID($MapID);
 	 if ( $Mapa !== FALSE ){
-			$MapaAtributos = $Mapa;
-			LoadMapSetView($MapaAtributos['XYZ']);			
+			LoadMapSetView($Mapa['XYZ']);	//Carrega as configurações do mapa			
+			if( !Vazio($Mapa['Titulo'])) { $SetMapTitulo = $Mapa['Titulo'];}
+			if( !Vazio($Mapa['B'])) { $SetBaseLayer = $Mapa['B'];	}
+			if(ProcessarOverlays($Mapa['O'],$OvlTemp)){ $SetOverlay = $OvlTemp;}			
 			
-			if( !Vazio($MapaAtributos['Titulo'])) { $SetMapTitulo = $MapaAtributos['Titulo'];}
-
-			if( !Vazio($MapaAtributos['B'])) { $SetBaseLayer = $MapaAtributos['B'];	}
-
-			if(ProcessarOverlays($MapaAtributos['O'],$OvlTemp)){ $SetOverlay = $OvlTemp;}			
-			
-			if( !Vazio($MapaAtributos['MB'])) {
-		 	   $TempCustomOverLay = $MapaAtributos['MB'];
+			if(ProcessarOverlaysMB($Mapa['MB'],$OvlTemp)){ $SetOverlayMB = $OvlTemp;}			
+/*			
+			if( !Vazio($Mapa['MB'])) {
+		 	   $TempCustomOverLay = $Mapa['MB']; //PARA CADA UM DESSES, FAZER ISSO
 		 	   $ArrCustomOverLay = explode(",",$TempCustomOverLay);
 		 	   if( count($ArrCustomOverLay) == 2 ) {	//2 parâmetros... OK?
 		 	   	$CustomOverLay = $ArrCustomOverLay; 	   	 	   
 		 	   }
 			}
+*/			
+			
+			$Tit = "";
+			$Des = "";
+			$Tit = $Mapa['Titulo']; 
+			$Des = $Mapa['Descricao'];			
+			$URL = ComporLinkHTML("http://www.projetorgm.com.br/map/?id=$MapID","Compartilhe","_parent","LINK");
+			if( !Vazio($Tit) || !Vazio($Des) ){
+			   $SetMapLegend = "<p><b>$Tit</b></p><p>$Des</p>" . $URL;			
+			}
+
+			
+			
 	 }
 
  }
@@ -115,8 +126,8 @@ include_once "include/proc.php";
 	<link rel="shortcut icon" href="imagens/favicon.png" type="image/png"/>
 	<script src="include/funcoes.js"></script>
 	<!-- Mapbox  -->
-	<script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.js'></script>
-	<link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.css' rel='stylesheet' />	
+	<script src='https://api.tiles.mapbox.com/mapbox.js/v2.2.1/mapbox.js'></script>
+	<link href='https://api.tiles.mapbox.com/mapbox.js/v2.2.1/mapbox.css' rel='stylesheet' />
 	<link href='//mapbox.com/base/latest/base.css' rel='stylesheet' />
 
 	<!-- Mapbox Leaflet Locate plugin  -->
@@ -140,7 +151,7 @@ include_once "include/proc.php";
 <body>
 	<div id='geocode-selector'></div>
 	<div id='mapdiv'></div>
-
+	<div id="fb-root"></div>
 	<?
 		Linha("<script>");		
 		Linha("		var map = L.mapbox.map('mapdiv'); //Cria o mapa");
@@ -162,32 +173,19 @@ include_once "include/proc.php";
 
 		//Existe OverLayer customizada?
 		Linha(" ");
-		if( isset($CustomOverLay) ) {
-					Linha("		//Layer personalizada");
-				 	Linha("		var layer_Custom        = L.mapbox.featureLayer('".$CustomOverLay[0]."');"); 
-				 	Linha("		ControlLayers.addOverlay(layer_Custom, '".$CustomOverLay[1]."');");
-				 	Linha("		map.addLayer(layer_Custom);");
-		}
+		if( isset($SetOverlayMB) ) { MostrarOverlaysMB($SetOverlayMB); }
 		
-      if( isset( $MapaAtributos ) ) {
-      	if (isset($CustomOverLay) ){
-      	    $LayerMapBox = $CustomOverLay[0];
-      	}
-      	$RGMGo = "http://projetorgm.com.br/?go=";
-      	$RGMGoNick = $RGMGo . $MapaAtributos['Nick']; 
-      	$RGMGoNick = "<small><a href='".$RGMGoNick."'>LINK</a></small>";
+      if( isset( $SetMapLegend ) ) {
       	
-      	$Legenda = "<p><b>". $MapaAtributos['Titulo'] ."</b></p><p>". $MapaAtributos['Descricao'] ."</p>" . $RGMGoNick;
-			Linha("		map.legendControl.addLegend(\"".$Legenda."\");");
+			Linha("		var LegendaDoMapa = new L.mapbox.LegendControl();");
+			Linha("		LegendaDoMapa.addLegend(\"".$SetMapLegend."\");");
+			Linha("		LegendaDoMapa.addTo(map);");
 		}
 
 		Linha("	</script>");
 	?>	
 	
 	
-	<script>
-	  
-	</script>
 	
 </body>
 </html>
