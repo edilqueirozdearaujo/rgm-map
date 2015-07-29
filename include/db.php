@@ -39,6 +39,14 @@ function MySQLResultsFromSQL($SQL) {
 }
 
 
+function GetNextTableID($TableName){
+	$Result = mysql_query("SHOW TABLE STATUS LIKE '$TableName'");
+	$Row = mysql_fetch_array($Result);
+	$NextID = $Row['Auto_increment'];
+	return $NextID; 
+}
+
+
 
 //Search calendar and return as array
 function SearchByID($ID) {

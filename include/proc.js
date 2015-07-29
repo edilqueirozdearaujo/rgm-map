@@ -1,36 +1,49 @@
 //initialization ************************************************************
-var MapBaseLayersSelect = "<span class='icon layers'></span>"
-		+"<select id='map-select-layer' >"
-			+"<option id='lMNK' value='lMNK' >OpenStreetMap</option>"  
-			+"<option id='lMKG' value='lMKG' >OSM Tons de cinza</option>"
-			+"<option id='lMBL' value='lMBL' >Light Mapbox</option>"  
-			+"<option id='lMBD' value='lMBD' >Dark Mapbox</option>"
-			+"<option id='lOTD' value='lOTD' >Ar livre</option>"
-			+"<option id='lMBO' value='lMBO' >Ar livre Mapbox</option>"
-			+"<option id='lCYL' value='lCYL' >Ciclistas</option>"
-			+"<option id='lMBB' value='lMBB' >Bike</option>"
-			+"<option id='lMBP' value='lMBP' >Lápis</option>"
-			+"<option id='lMBC' value='lMBC' >Comic</option>"
-			+"<option id='lMBR' value='lMBR' >Piratas</option>"
-			+"<option id='lSTW' value='lSTW' >Aquarela</option>"
-			+"<option id='lSTL' value='lSTL' >Toner Light</option>"
-			+"<option id='lSTT' value='lSTT' >Toner Dark</option>"
-			+"<option id='lMBW' value='lMBW' >Poster Lambe-lambe</option>"
-			+"<option id='lMBS' value='lMBS' >Satélite Mapbox</option>"
-			+"<option id='lESR' value='lESR' >Satélite lESR</option>"
-			+"<option id='lIBR' value='lIBR' >IBGE Rural</option>"
-			+"<option id='lIBU' value='lIBU' >IBGE Urbano</option>"
-		+"</select><div id='map-controls-group'></div>";
-
-
+var LinkPrint  = HrefFromURLPlus("#","icon printer","Imprimir","","");
+var MapAddLButton  = "<span >" + HrefFromURLPlus("#","icon plus rgm-map-addl-button","Adicionar mapas","","") + "</span>";
+var MapShareButton = "<span>"+ HrefFromURLPlus("#","icon share rgm-map-share-button","Compartilhe","","") +"</span>"; 
 var LinksAlvo = "";
 var MapControlsInner = "";     //HTML que vai dentro do LegendControl ControlesDoMapa
-var MapNotesPrev = "";  //Para remover a cada atualização
 var MapaEmbutido = MapIsEmb();
+
 //Os links dos botões devem abrir fora do iframe ou quadro onde o mapa foi embutido
 if ( MapaEmbutido ) {
-  LinksAlvo = '_parent';  
+  LinksAlvo = '_parent';
+  MapShareButton = "";
+  MapAddLButton  = "";       
 }
+
+var MapBaseLayersSelect = "<form id='rgm-map-controles' method='post' >"+MapAddLButton+"<span class='icon layers'></span>"
+		+"<select id='map-select-layer' name='share-b' >"
+			+"<option value='lMNK' >OpenStreetMap</option>"  
+			+"<option value='lMKG' >OSM Tons de cinza</option>"
+			+"<option value='lMBL' >Light Mapbox</option>"  
+			+"<option value='lMBD' >Dark Mapbox</option>"
+			+"<option value='lOTD' >Ar livre</option>"
+			+"<option value='lMBO' >Ar livre Mapbox</option>"
+			+"<option value='lCYL' >Ciclistas</option>"
+			+"<option value='lMBB' >Bike</option>"
+			+"<option value='lMBP' >Lápis</option>"
+			+"<option value='lMBC' >Comic</option>"
+			+"<option value='lMBR' >Piratas</option>"
+			+"<option value='lSTW' >Aquarela</option>"
+			+"<option value='lSTL' >Toner Light</option>"
+			+"<option value='lSTT' >Toner Dark</option>"
+			+"<option value='lMBW' >Poster Lambe-lambe</option>"
+			+"<option value='lMBS' >Satélite Mapbox</option>"
+			+"<option value='lESR' >Satélite lESR</option>"
+			+"<option value='lIBR' >IBGE Rural</option>"
+			+"<option value='lIBU' >IBGE Urbano</option>"
+		+"</select>"+ MapShareButton
+		+"<div id='map-controls-group'></div>"
+		+"<input id='share-id' name='share-id' type='hidden' value='0'>"
+		//+"<input id='share-b'  name='share-b' type='hidden' value=''>"
+		+"<input id='share-o'  name='share-o' type='hidden' value=''>"
+		+"<input id='share-mb' name='share-mb' type='hidden' value=''>"
+		+"<input id='share-xyz' name='share-xyz'  type='hidden' value=''>"
+		+"<input id='share-tit' name='share-tit' type='hidden' value=''>"
+		+"<input id='share-dsc' name='share-dsc' type='hidden' value=''>"
+		+"</form>";
 
 var ControlesDoMapa = new L.mapbox.LegendControl({position: 'topright'});
 ControlesDoMapa.addTo(map);
@@ -106,17 +119,17 @@ function AtualizarControlesDoMapa() {
 	PreLinkNote      = GetLinkNote(Lat,Lon); 
 	LinkNote   = HrefFromURLPlus(PreLinkNote,"icon contact","Localizou um erro ou algo faltando? Informe pra gente :)","",LinksAlvo);
 
-	LinkPrint  = HrefFromURLPlus("#","icon printer","Imprimir","Imprimir <small>(em breve)</small>");
 	
-	LinksLegenda = LinkOSMR + " " + LinkMapillary + " " + LinkF4Map + " " + LinkEcoMap + " " + LinkOSMe + " " + LinkLast90 + " " + LinkOSMd + " " + LinkNote; // + " " + LinkPrint;
-
+	LinksLegenda = LinkOSMR + " " + LinkMapillary + " " + LinkF4Map + " " + LinkEcoMap + " " + LinkOSMe
+					 + " " + LinkLast90 + " " + LinkOSMd + " "  + LinkNote; // + " " + LinkPrint;
+	
+	if ( !MapaEmbutido ) {
+		LinksLegenda = LinksLegenda; 
+	}
 	
 	MakeMapControls(LinksLegenda);
 }
 
-
-//Default layer to show
-lMNK.addTo(map);  
 
 var BaseLayers = {};	
 var Overlays = {'Fotos do Mapillary'       : olMPLL};	
@@ -220,3 +233,91 @@ $("#map-select-layer").change(function() {
 	ChangeLayer(Opcao);			
 });
 
+$(".rgm-map-share-button").click(function(e) {
+	//share-id: se mapa existente, é informado na abertura do mapa
+	//          se novo mapa, será gerado ao submeter form
+	//Baselayer Overlay: Está dentro do form
+	
+	e.preventDefault();
+	var Tit = "";
+	var Dsc = "";		
+	var Submeter = true;
+
+	var TestID = $("#share-id").val();
+	
+	//Se já tiver mapa cadastrado, nada a fazer. ID = string
+	if ( TestID == '0' ) {
+		Tit = prompt("Dê um nome para este mapa", "Mapa sem título");
+
+		var Cnt = map.getCenter();
+		var Zoom = map.getZoom();
+		var Lat = Cnt.lat;
+		var Lon = Cnt.lng;
+		var XYZ = Zoom + "/" + Lat + "/" + Lon;
+		var O  = ""; 
+	
+		$("#share-xyz").val(XYZ);	
+		if (Tit != null && Tit != "") { 
+				Dsc = prompt("Quer deixar alguma descrição sobre esse mapa?", "");		
+				$("#share-tit").val(Tit);		
+				if (Dsc != null) { $("#share-dsc").val(Dsc);	}
+			
+				if (map.hasLayer( olMPLL )) {O = "MPLL";}	
+				if (map.hasLayer( olNASC )) {O = O + ";NASC";}	
+				$("#share-o").val(O);	
+				
+				var Total = RawOverlaysMB.length;
+				var MBLayers = "";
+				for ( Cont = 0; Cont < Total; Cont++ ) {
+					MBLayers = MBLayers + RawOverlaysMB[Cont] + ";"; //
+				}
+				$("#share-mb").val(MBLayers );
+		}else {		
+			Submeter = false;
+		}		
+	}	
+	
+	if ( Submeter ) { $("#rgm-map-controles").submit();}			
+});
+
+
+//Função para adicionar mapas criados com o editor Mapbox! :)
+$(".rgm-map-addl-button").click(function(e) {
+	e.preventDefault();
+	var Link  = "Editor Mapbox: http://mapbox.com/editor/";
+	var Mapa = prompt("Adicione seus mapas criados com o " + Link + '! Informe o ID e apelido separados por vírgula', "projetorgm.n11d3kl9,Unidades");
+	
+	if ( Mapa != '' && Mapa != null ) {
+		if ( AddMBLayerInTheMap(Mapa) ) {				 
+			document.getElementById('share-id').value = 0; //Isso permite remixar um mapa existente, criando um novo
+		}else {
+			alert('Mapa inválido! Informe um ID e Apelido, separados por vírgulas');			
+		}
+	}		
+});
+
+//adiciona uma camada no mapa, e armazena informações. Dados = Array, 0 = mapbox ID e 1 = Apelido 
+function AddMBLayerInTheMap(DadosRaw) {
+	var MapID = null;
+	var MapNick = null;
+	var Dados = DadosRaw.split(',');
+	MapID = Dados[0]; 		 
+	MapNick = Dados[1];
+	 		 
+	if ( MapNick == null ) {				 
+			return false;
+	}else { //Podemos continuar...	
+		MapNick = MapNick.substr(0, 20);		
+		RawOverlaysMB[RawOverlaysMB.length] = MapID + "," + MapNick; //Salva camada como dados brutos		
+		var MBName = MapID.replace(".","_");	
+		var Indice = OverlaysMB.length;
+		OverlaysMB[Indice] = L.mapbox.featureLayer(MapID);
+		ControlLayers.addOverlay(OverlaysMB[Indice], MapNick);
+		map.addLayer(OverlaysMB[Indice]); 
+		
+		OverlaysMB[Indice].on('ready', function(){
+			map.fitBounds(OverlaysMB[Indice].getBounds());
+		});
+		return true;
+	}
+}

@@ -2,11 +2,6 @@
 	error_reporting(1);
 	ini_set("display_errors", 1 );
 
-// Projeto RGM
-// 
-//
-//
-//
 
 //======= Includes
 include_once "include/lang.php"; 	
@@ -14,13 +9,14 @@ include_once "include/config.php";
 include_once "include/funcoes.php"; 	
 include_once "include/db.php"; 	
 include_once "include/proc.php"; 	 	
+include_once "include/phpqrcode.php"; 	 	
 
 
 //======= Only for this page
 	$MinhaURL 	   = $_SERVER['PHP_SELF'];
 	$MinhaURL = NoIndexPHP($MinhaURL);	
 	$SessionName = 'rgm-map';	
-	
+	$MapaDefinido = 0;	
 
 //======= Pre-process
 	//RedirectIfNotIsHTTPS(cDominioFullURLSSL . $MinhaURL); //Força HTTPS
@@ -72,33 +68,57 @@ include_once "include/proc.php";
  	   }
  }
 */
- if (filter_has_var(INPUT_GET,'id')) {
+if (filter_has_var(INPUT_POST,'share-id')) {
+	$ID  = FromBase36(filter_input(INPUT_POST,'share-id',FILTER_SANITIZE_STRING));
+	$B   = filter_input(INPUT_POST,'share-b',FILTER_SANITIZE_STRING);
+	$O   = filter_input(INPUT_POST,'share-o',FILTER_SANITIZE_STRING);
+	$MB  = filter_input(INPUT_POST,'share-mb',FILTER_SANITIZE_STRING);
+	$XYZ = filter_input(INPUT_POST,'share-xyz',FILTER_SANITIZE_STRING);
+	$Tit = filter_input(INPUT_POST,'share-tit',FILTER_SANITIZE_STRING);
+	$Dsc = filter_input(INPUT_POST,'share-dsc',FILTER_SANITIZE_STRING);
+	
+	//retira o "l" no começo do nome da camada
+	$B[0] = " ";
+	$B = trim($B);
+	
+	//Novo mapa? Cadastra e pega ID
+	if( $ID == 0 ) {
+		$ProximoID = 0;
+		$Res = DBServerConnect();
+		if( DBIsConnected($Res)) {
+			if (DBSelect(cDBName)){
+				$ProximoID = GetNextTableID("RGMMap");					
+				$SQL = "INSERT INTO RGMMap (B,O,MB,XYZ,Titulo,Descricao) VALUES ('$B','$O','$MB','$XYZ','$Tit','$Dsc');";
+				$ExeSQL = mysql_query($SQL);
+			}
+			DBServerDisconnect($Res);			
+		}
+	}else {
+		$ProximoID = $ID;
+	}
+
+	if( $ProximoID != 0 ) {
+		$CompartilharMapa["ID"] = ToBase36($ProximoID);
+	}		
+}
+elseif (filter_has_var(INPUT_GET,'id')) {
  	 $MapID = filter_input(INPUT_GET,'id',FILTER_SANITIZE_STRING);
  	 $Mapa = SearchByID($MapID);
 	 if ( $Mapa !== FALSE ){
+	 		$MapaDefinido = $MapID;
 			LoadMapSetView($Mapa['XYZ']);	//Carrega as configurações do mapa			
 			if( !Vazio($Mapa['Titulo'])) { $SetMapTitulo = $Mapa['Titulo'];}
 			if( !Vazio($Mapa['B'])) { $SetBaseLayer = $Mapa['B'];	}
 			if(ProcessarOverlays($Mapa['O'],$OvlTemp)){ $SetOverlay = $OvlTemp;}			
 			
 			if(ProcessarOverlaysMB($Mapa['MB'],$OvlTemp)){ $SetOverlayMB = $OvlTemp;}			
-/*			
-			if( !Vazio($Mapa['MB'])) {
-		 	   $TempCustomOverLay = $Mapa['MB']; //PARA CADA UM DESSES, FAZER ISSO
-		 	   $ArrCustomOverLay = explode(",",$TempCustomOverLay);
-		 	   if( count($ArrCustomOverLay) == 2 ) {	//2 parâmetros... OK?
-		 	   	$CustomOverLay = $ArrCustomOverLay; 	   	 	   
-		 	   }
-			}
-*/			
 			
 			$Tit = "";
 			$Des = "";
 			$Tit = $Mapa['Titulo']; 
 			$Des = $Mapa['Descricao'];			
-			$URL = ComporLinkHTML("http://www.projetorgm.com.br/map/?id=$MapID","Compartilhe","_parent","LINK");
 			if( !Vazio($Tit) || !Vazio($Des) ){
-			   $SetMapLegend = "<p><b>$Tit</b></p><p>$Des</p>" . $URL;			
+			   $SetMapLegend = "<p><b>$Tit</b></p><p>$Des</p>";			
 			}
 
 			
@@ -108,7 +128,6 @@ include_once "include/proc.php";
  }
 
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -148,25 +167,37 @@ include_once "include/proc.php";
 	<script src="include/jquery.min.js" ></script>
 	<script src='include/leafletrout.js'></script>
 </head>
-<body>
-	<div id='geocode-selector'></div>
-	<div id='mapdiv'></div>
-	<div id="fb-root"></div>
-	<?
-		Linha("<script>");		
-		Linha("		var map = L.mapbox.map('mapdiv'); //Cria o mapa");
-		TryMapSetView(); //Para evitar o erro:  "Error: Set map center and zoom first"
-		Linha("		var MapHash = L.hash(map);");
-		Linha("</script>");		
-	?>
-	
-	<script src='include/proc.js'></script>
-
-	<?
-		Linha("<script>");		
-		//Layer foi especificada por URL?
+<body>	
+<?
+if(isset($MapasRecentes)){	
+	//$MapasRecentes["FROM"]	
+		
+}
+elseif(isset($CompartilharMapa)){	
+	CompartilharMapa($CompartilharMapa['ID']);	
+}
+else{
+ 	Linha("<div id='geocode-selector'></div>");
+ 	Linha("<div id='mapdiv'></div>");
+	Linha("<script>");		
+	Linha("		var RawOverlaysMB = []; //Overlays como dados brutos");		
+	Linha("		var OverlaysMB = []; //Feature layers");		
+	Linha("		var map = L.mapbox.map('mapdiv'); //Cria o mapa");
+	TryMapSetView(); //Para evitar o erro:  "Error: Set map center and zoom first"
+	Linha("		var MapHash = L.hash(map);");
+	Linha("		lMNK.addTo(map);");  
+	Linha("</script>");		
+	Linha("<script src='include/proc.js'></script>");
+	Linha("<script>");
+		//Layer foi especificada por URL, ou usará camada padrão?
 		if( isset($SetBaseLayer) ) { TrySetBaseLayer($SetBaseLayer);}
-
+		
+		//Se mapa for especificado, grava o ID do mapa para caso de usar o botão Share
+		if( FromBase36($MapaDefinido) > 0 ) {
+			//Linha("		$('#share-id').value = $MapaDefinido; ");
+			Linha("		document.getElementById('share-id').value = '$MapaDefinido';");
+		}
+				
 		//Overlay foi especificada?
 		Linha(" ");
 		if( isset($SetOverlay) ) { MostrarOverlays($SetOverlay); }
@@ -182,9 +213,14 @@ include_once "include/proc.php";
 			Linha("		LegendaDoMapa.addTo(map);");
 		}
 
+		//Em caso de baselayer, este fix neste local cuida de mudar o select para a opção correta.		
+		if( isset($SetBaseLayer) && IsValidLayer($SetBaseLayer) ){
+			Linha("		if( map.hasLayer(l".$SetBaseLayer.") ){document.getElementById('map-select-layer').value = 'l".$SetBaseLayer."';}");
+		}
 		Linha("	</script>");
-	?>	
-	
+}	
+		
+?>	
 	
 	
 </body>

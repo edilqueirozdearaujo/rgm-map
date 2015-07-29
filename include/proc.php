@@ -1,11 +1,17 @@
 <?
 
- define("cSiteRGM","<a href='https://projetorgm.com.br/'><img class='alinhar-vertical' src='imagens/favicon.png' width='32px' /> projetorgm.com.br</a>");
+define("cSiteRGM","<a href='https://projetorgm.com.br/'><img class='alinhar-vertical' src='imagens/favicon.png' width='32px' /> projetorgm.com.br</a>");
+define("cMapasPorPagina",30);
+define("cURLBase", "http://www.projetorgm.com.br/map/";);
+
 
 //MAP OPTIONS ------------------------------------------------------------------------------------------ 
 $MapSetView["Lat"] = "-24.1267";
 $MapSetView["Lon"] = "-48.3721";
 $MapSetView["Zoom"] = "10";
+
+
+
 
 function IsValidLayer($Test){
 	$IsLayer = FALSE;
@@ -37,16 +43,17 @@ function TrySetBaseLayer($SetBaseLayer) {
 			Linha("		//Layer padrão modificada por URL");	
 		 	Linha("		RmBaseLayers(); //first, remove all baselayers"); 				 					 	
 		 	Linha("		map.addLayer(l".$SetBaseLayer.");");
-		 	Linha("		document.getElementById('l".$SetBaseLayer."').selected = true;");				 	
 	}
 }
 
 function LoadMapSetView($Dados) {
 	global $MapSetView;
-	$XYZ = explode("/", $Dados);	
-	$MapSetView["Lat"]  = $XYZ[1];
-	$MapSetView["Lon"]  = $XYZ[2];
-	$MapSetView["Zoom"] = $XYZ[0];
+	if( !Vazio($Dados) ) {
+		$XYZ = explode("/", $Dados);	
+		$MapSetView["Lat"]  = $XYZ[1];
+		$MapSetView["Lon"]  = $XYZ[2];
+		$MapSetView["Zoom"] = $XYZ[0];
+	}
 }
 
 //Escreve um trecho javascript que define coordenadas e zoom do mapa
@@ -102,17 +109,52 @@ function MostrarOverlays($SetOverlay) {
 }
 
 
+function MostrarMapasRecentes($From,$Limit,$IsMobile) {
+	function Botao($URL,$Conteudo,$btnMenu) {
+		Linha("		<div class='ctredondo $btnMenu' >");
+		Linha("				<a class='icon big osm' href='$URL'><h1>$Titulo</h1></a>");
+		Linha("				<div id='clr'></div>");
+		Linha("			</div>");
+	
+	}	
+	
+	$btnMenu = "botoes";
+	if( $IsMobile ) {
+			$btnMenu = "mbotoes";
+	}
+	
+	$SQL = "SELECT * FROM RGMMap $From LIMIT $Limit ;";
+	$BaseURL = cURLBase; 
+
+	$ExeSQL = mysql_query($SQL);
+	$Total = MySQLResults($ExeSQL);
+	if( $Total > 0 ) {
+		for( $Cont = 0; $Cont < $Total; $Cont++ ) {
+		 	$Resultado = mysql_fetch_array($ExeSQL);
+		 	$URL = $BaseURL . "?id=" . $Resultado['ID'];
+		 	
+		 	Botao($URL,$Resultado['Titulo'],$btnMenu);
+		 	
+		}
+		 
+	}
+ 
+ 	
+
+
+}
+
 function MostrarOverlaysMB($SetOverlay) {
 	Linha("		//Layers mapbox");
 	foreach($SetOverlay as &$OvlTemp ){
 		$MBID    = $OvlTemp[0];		 
 		$MBTitle = $OvlTemp[1];		
-		$MBName =  TrocarCaractere($MBID,".","_" ); 
-		
-	 	Linha("		var $MBName        = L.mapbox.featureLayer('$MBID');"); 
-	 	Linha("		ControlLayers.addOverlay($MBName, '$MBTitle');");
-	 	Linha("		map.addLayer($MBName);");
+//		$MBName =  TrocarCaractere($MBID,".","_" ); 		
+//	 	Linha("		var $MBName        = L.mapbox.featureLayer('$MBID');"); 
+//	 	Linha("		ControlLayers.addOverlay($MBName, '$MBTitle');");
+//	 	Linha("		map.addLayer($MBName);");
 					
+		Linha("		AddMBLayerInTheMap('$MBID,$MBTitle');");
 	}									
 }
 
@@ -148,9 +190,7 @@ function Footer() {
 }
 
 
-function GetIDURL($MinhaURL,$ID) {
-	return cDominioFullURLSSL . $MinhaURL."?id=".$ID;	
-}
+
 
 //Isto limpará todas variáveis criadas para seção
 function ClearVars() {
@@ -159,6 +199,28 @@ function ClearVars() {
 
 
 //SHARE OPTIONS ------------------------------------------------------------------------------------------ 
+function CompartilharMapa($ID){
+	$BaseURL = cURLBase; 
+	$MapURL = $BaseURL . "?id=$ID";	 
+	$Embed = "<iframe src=\"".$MapURL."\" width=\"425\" height=\"350\" frameborder=\"0\" scrolling=\"no\" marginheight=\"0\" marginwidth=\"0\" ></iframe>" ;
+	Linha("<h3><a class='icon prev big button' href='$MapURL' id='voltar-ao-mapa' >VOLTAR AO MAPA</a></h3>");
+	Linha("<div class='alinhar-centro'>");
+
+	Linha("<p>Compartilhe este mapa</p>");
+	Linha("<p>Link: <input type='text' size='60' onclick='this.select();' value='$MapURL' ></p>");
+	Linha("<p>Embutir:<br><textarea cols='60' onclick='this.select();' >$Embed</textarea></p>");
+	Linha("	<div class='inline'>");	TwitterShare($BaseURL);	Linha("	</div>"); 
+	Linha("	<div class='inline'>");	FBShare($BaseURL); Linha("	</div>"); 
+	   $FileName =  "share/" . $ID . '.png';
+	   $URL = $MapURL;
+	   $QRCodeW = 6;
+	   if( !file_exists($FileName) ) {
+			QRcode::png($URL,$FileName, "M", $QRCodeW, 2);
+		}	  	
+	Linha("<p></br></p>");
+	Linha("<p>QR Code:<br><img src='$FileName' alt='QR Code'></p>");
+	Linha("</div>");
+}
 
 function TwitterShare($URL) {
 	Linha("		");
