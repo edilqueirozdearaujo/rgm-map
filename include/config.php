@@ -18,9 +18,7 @@
 */
 
 
+
 	$TbPrefix = "";
-
-	 define("cMapboxAccessToken","your-Mapbox-Access-Token"); // -> Learn more: https://www.mapbox.com/mapbox.js/	
-
 
 ?>

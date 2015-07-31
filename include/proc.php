@@ -1,8 +1,10 @@
 <?
+error_reporting(1);
+ini_set("display_errors", 1 );
 
 define("cSiteRGM","<a href='https://projetorgm.com.br/'><img class='alinhar-vertical' src='imagens/favicon.png' width='32px' /> projetorgm.com.br</a>");
-define("cMapasPorPagina",30);
-define("cURLBase", "http://www.projetorgm.com.br/map/";);
+define("cMapasPorPagina",200);
+define("cURLBase", "http://www.projetorgm.com.br/map/");
 
 
 //MAP OPTIONS ------------------------------------------------------------------------------------------ 
@@ -109,39 +111,64 @@ function MostrarOverlays($SetOverlay) {
 }
 
 
-function MostrarMapasRecentes($From,$Limit,$IsMobile) {
-	function Botao($URL,$Conteudo,$btnMenu) {
-		Linha("		<div class='ctredondo $btnMenu' >");
-		Linha("				<a class='icon big osm' href='$URL'><h1>$Titulo</h1></a>");
-		Linha("				<div id='clr'></div>");
-		Linha("			</div>");
+function MostrarMapasRecentes($From,$Limit) {
+	function Botao($URL,$Conteudo) {
+		Linha("				<a class='button fill-green icon osm space space-bottom1' href='$URL'>$Conteudo</a>");
 	
 	}	
-	
-	$btnMenu = "botoes";
-	if( $IsMobile ) {
-			$btnMenu = "mbotoes";
-	}
-	
-	$SQL = "SELECT * FROM RGMMap $From LIMIT $Limit ;";
-	$BaseURL = cURLBase; 
-
-	$ExeSQL = mysql_query($SQL);
-	$Total = MySQLResults($ExeSQL);
-	if( $Total > 0 ) {
-		for( $Cont = 0; $Cont < $Total; $Cont++ ) {
-		 	$Resultado = mysql_fetch_array($ExeSQL);
-		 	$URL = $BaseURL . "?id=" . $Resultado['ID'];
-		 	
-		 	Botao($URL,$Resultado['Titulo'],$btnMenu);
-		 	
+	function BotaoNav($Conteudo,$Icon) {
+		$ModoIcon = 'icon';
+		if( Vazio($Icon) ) {
+			$ModoIcon = '';		
 		}
-		 
+		Linha("				<a class='button $ModoIcon $Icon dot botao-paginador' href='#'>$Conteudo</a>");	
+	}	
+
+	$BaseURL = cURLBase;
+
+	Linha("<div class='pad2 fill-darken3 dark'>");
+	Linha("		<a class='inline icon prev big button space' href='$BaseURL' id='voltar-ao-mapa' >VOLTAR AO MAPA</a>");
+	Linha("		<h3 class='inline fancy' >Galeria dos mapas que já foram feitos</h3>");
+	Linha("</div>");
+	
+	Linha("<div class='pad2 dark center'>");
+	Linha("<hr>");
+
+	$Res = DBServerConnect();
+	if( DBIsConnected($Res)) {
+		if (DBSelect(cDBName)){
+				$SQL = "SELECT * FROM RGMMap LIMIT $From , $Limit ;";
+			
+				$ExeSQL = mysql_query($SQL) or die (mysql_error());;
+				$Total = MySQLResults($ExeSQL);
+				if( $Total > 0 ) {
+					for( $Cont = 0; $Cont < $Total; $Cont++ ) {
+					 	$Resultado = mysql_fetch_array($ExeSQL);
+					 	$URL = $BaseURL . "?id=" . ToBase36($Resultado['ID']);					 	
+					 	Botao($URL,$Resultado['Titulo']);
+					 	
+					}
+					 
+				}		
+		}
+		DBServerDisconnect($Res);					
 	}
- 
- 	
+	Linha("</div>");
 
-
+/*	Linha("	<div class='pad2'>");
+	Linha("	<div class='center'>");
+	BotaoNav('','prev');		
+	$Total = 5;
+	for( $Cont = 0; $Cont < $Total; $Cont++ ) {
+		BotaoNav($Cont,'');		
+	}
+	BotaoNav('','next');		
+	Linha("	</div>");
+	Linha("	</div>");	
+	Linha("	<script src='include/proc-recent.js'></script>");
+*/	
+	
+	Footer();
 }
 
 function MostrarOverlaysMB($SetOverlay) {

@@ -2,6 +2,7 @@
 var LinkPrint  = HrefFromURLPlus("#","icon printer","Imprimir","","");
 var MapAddLButton  = "<span >" + HrefFromURLPlus("#","icon plus rgm-map-addl-button","Adicionar mapas","","") + "</span>";
 var MapShareButton = "<span>"+ HrefFromURLPlus("#","icon share rgm-map-share-button","Compartilhe","","") +"</span>"; 
+var MapRecentButton = "<span>"+ HrefFromURLPlus("http://www.projetorgm.com.br/map/?m=1","icon star rgm-map-recent-button","Mapas recentes","","") +"</span>"; 
 var LinksAlvo = "";
 var MapControlsInner = "";     //HTML que vai dentro do LegendControl ControlesDoMapa
 var MapaEmbutido = MapIsEmb();
@@ -10,7 +11,8 @@ var MapaEmbutido = MapIsEmb();
 if ( MapaEmbutido ) {
   LinksAlvo = '_parent';
   MapShareButton = "";
-  MapAddLButton  = "";       
+  MapAddLButton  = "";
+  MapRecentButton = "";       
 }
 
 var MapBaseLayersSelect = "<form id='rgm-map-controles' method='post' >"+MapAddLButton+"<span class='icon layers'></span>"
@@ -35,6 +37,7 @@ var MapBaseLayersSelect = "<form id='rgm-map-controles' method='post' >"+MapAddL
 			+"<option value='lIBR' >IBGE Rural</option>"
 			+"<option value='lIBU' >IBGE Urbano</option>"
 		+"</select>"+ MapShareButton
+		+"</select>"+ MapRecentButton
 		+"<div id='map-controls-group'></div>"
 		+"<input id='share-id' name='share-id' type='hidden' value='0'>"
 		//+"<input id='share-b'  name='share-b' type='hidden' value=''>"
@@ -43,6 +46,7 @@ var MapBaseLayersSelect = "<form id='rgm-map-controles' method='post' >"+MapAddL
 		+"<input id='share-xyz' name='share-xyz'  type='hidden' value=''>"
 		+"<input id='share-tit' name='share-tit' type='hidden' value=''>"
 		+"<input id='share-dsc' name='share-dsc' type='hidden' value=''>"
+		+"<input id='map-recent' name='map-recent' type='hidden' value=''>"
 		+"</form>";
 
 var ControlesDoMapa = new L.mapbox.LegendControl({position: 'topright'});
@@ -263,7 +267,10 @@ $(".rgm-map-share-button").click(function(e) {
 				if (Dsc != null) { $("#share-dsc").val(Dsc);	}
 			
 				if (map.hasLayer( olMPLL )) {O = "MPLL";}	
-				if (map.hasLayer( olNASC )) {O = O + ";NASC";}	
+				if (map.hasLayer( olNASC )) {
+					if( O != "" && O != null  ) {	O = O + ";";} //Adiciona um separador
+					O = O + "NASC";
+				}	
 				$("#share-o").val(O);	
 				
 				var Total = RawOverlaysMB.length;
@@ -295,6 +302,14 @@ $(".rgm-map-addl-button").click(function(e) {
 		}
 	}		
 });
+
+
+$(".rgm-map-recent-button").click(function(e) {
+	//e.preventDefault();
+	//$("#map-recent").val('1');	
+	//$("#rgm-map-controles").submit();
+});
+
 
 //adiciona uma camada no mapa, e armazena informações. Dados = Array, 0 = mapbox ID e 1 = Apelido 
 function AddMBLayerInTheMap(DadosRaw) {

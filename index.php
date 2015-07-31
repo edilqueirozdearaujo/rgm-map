@@ -68,14 +68,28 @@ include_once "include/phpqrcode.php";
  	   }
  }
 */
-if (filter_has_var(INPUT_POST,'share-id')) {
+
+if (filter_has_var(INPUT_GET,'m')) {
+	$MapasRecentes = filter_input(INPUT_GET,'m',FILTER_SANITIZE_STRING);
+	if( $MapasRecentes < 1 ) { $MapasRecentes = 1; }
+}
+elseif (filter_has_var(INPUT_POST,'share-id')) {
+	$Data = date("Y-m-d");
+	$Hora = date("H:i:s");
 	$ID  = FromBase36(filter_input(INPUT_POST,'share-id',FILTER_SANITIZE_STRING));
 	$B   = filter_input(INPUT_POST,'share-b',FILTER_SANITIZE_STRING);
 	$O   = filter_input(INPUT_POST,'share-o',FILTER_SANITIZE_STRING);
 	$MB  = filter_input(INPUT_POST,'share-mb',FILTER_SANITIZE_STRING);
 	$XYZ = filter_input(INPUT_POST,'share-xyz',FILTER_SANITIZE_STRING);
-	$Tit = filter_input(INPUT_POST,'share-tit',FILTER_SANITIZE_STRING);
-	$Dsc = filter_input(INPUT_POST,'share-dsc',FILTER_SANITIZE_STRING);
+	$Tit  = filter_input(INPUT_POST,'share-tit',FILTER_SANITIZE_STRING);
+	$Dsc  = filter_input(INPUT_POST,'share-dsc',FILTER_SANITIZE_STRING);
+
+	$ExpXYZ = explode("/",$XYZ);
+
+	$Zoom = $ExpXYZ[0];
+	$Lat = $ExpXYZ[1];
+	$Lon = $ExpXYZ[2];
+
 	
 	//retira o "l" no começo do nome da camada
 	$B[0] = " ";
@@ -88,7 +102,7 @@ if (filter_has_var(INPUT_POST,'share-id')) {
 		if( DBIsConnected($Res)) {
 			if (DBSelect(cDBName)){
 				$ProximoID = GetNextTableID("RGMMap");					
-				$SQL = "INSERT INTO RGMMap (B,O,MB,XYZ,Titulo,Descricao) VALUES ('$B','$O','$MB','$XYZ','$Tit','$Dsc');";
+				$SQL = "INSERT INTO RGMMap (B,O,MB,Lat,Lon,Zoom,Data,Hora,Titulo,Descricao) VALUES ('$B','$O','$MB','$Lat','$Lon','$Zoom','$Data','$Hora','$Tit','$Dsc');";
 				$ExeSQL = mysql_query($SQL);
 			}
 			DBServerDisconnect($Res);			
@@ -106,6 +120,9 @@ elseif (filter_has_var(INPUT_GET,'id')) {
  	 $Mapa = SearchByID($MapID);
 	 if ( $Mapa !== FALSE ){
 	 		$MapaDefinido = $MapID;
+	 		
+	 		//$Mapa['XYZ'] = $Mapa['Zoom'] . "/"  . $Mapa['Lat'] . "/" . $Mapa['Lon'];	 		  	 		
+	 		
 			LoadMapSetView($Mapa['XYZ']);	//Carrega as configurações do mapa			
 			if( !Vazio($Mapa['Titulo'])) { $SetMapTitulo = $Mapa['Titulo'];}
 			if( !Vazio($Mapa['B'])) { $SetBaseLayer = $Mapa['B'];	}
@@ -169,9 +186,11 @@ elseif (filter_has_var(INPUT_GET,'id')) {
 </head>
 <body>	
 <?
-if(isset($MapasRecentes)){	
-	//$MapasRecentes["FROM"]	
-		
+if(isset($MapasRecentes)){
+Linha("<!--entrou no comando-->");	
+	$Ini = 0 + (cMapasPorPagina * ($MapasRecentes - 1));
+	$Fin = $Ini + cMapasPorPagina;	
+	MostrarMapasRecentes($Ini,$Fin);		
 }
 elseif(isset($CompartilharMapa)){	
 	CompartilharMapa($CompartilharMapa['ID']);	
