@@ -181,6 +181,14 @@ elseif (filter_has_var(INPUT_GET,'id')) {
 	<link rel="stylesheet" href="css/OverPassLayer.css" />
 	<script src="include/OverPassLayer.js"></script>	
 
+	<!-- Leaflet Heat plugin > https://github.com/kartenkarsten/leaflet-layer-overpass/ -->
+	<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-heat/v0.1.3/leaflet-heat.js'></script>
+
+	<!-- Leaflet MarkerCluster plugin > https://github.com/kartenkarsten/leaflet-layer-overpass/ -->
+	<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js'></script>
+	<link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' />
+	<link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' />
+
 	<script src="include/jquery.min.js" ></script>
 	<script src='include/leafletrout.js'></script>
 </head>

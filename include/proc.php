@@ -76,13 +76,14 @@ function ProcessarOverlays($OvlBruta,&$Resultado) {
 }
 
 //Cada overlay Mapbox é um array de chave/id e título
+//A fazer: tratar para que opções inválidas de grupos sejam adicionadas
 function ProcessarOverlaysMB($OvlBruta,&$Resultado) {
 	$SemErro = FALSE;
 	if (!Vazio($OvlBruta)) {
 		$OverlaysArr = explode(";",$OvlBruta);
 		foreach( $OverlaysArr as &$CadaLMB ){
 		 	   $ArrCadaLMB = explode(",",$CadaLMB);
-		 	   if( count($ArrCadaLMB) == 2 ) {	//2 parâmetros... OK?
+		 	   if( count($ArrCadaLMB) >= 2 ) {	//2 parâmetros... OK?
 		 	   	$OverLaysMB[] = $ArrCadaLMB;
 		 	   	$SemErro = TRUE; 	   	 	   
 		 	   }
@@ -174,14 +175,19 @@ function MostrarMapasRecentes($From,$Limit) {
 function MostrarOverlaysMB($SetOverlay) {
 	Linha("		//Layers mapbox");
 	foreach($SetOverlay as &$OvlTemp ){
+		$MBGroup = "";
 		$MBID    = $OvlTemp[0];		 
-		$MBTitle = $OvlTemp[1];		
+		$MBTitle = $OvlTemp[1];
+		$MBGroup = $OvlTemp[2];
+		if( !Vazio($MBGroup) ) {
+			$MBGroup = ",".$MBGroup;
+		}
+
 //		$MBName =  TrocarCaractere($MBID,".","_" ); 		
 //	 	Linha("		var $MBName        = L.mapbox.featureLayer('$MBID');"); 
 //	 	Linha("		ControlLayers.addOverlay($MBName, '$MBTitle');");
 //	 	Linha("		map.addLayer($MBName);");
-					
-		Linha("		AddMBLayerInTheMap('$MBID,$MBTitle');");
+		Linha("		AddMBLayerInTheMap('$MBID,$MBTitle"."$MBGroup');");
 	}									
 }
 

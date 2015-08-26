@@ -6,6 +6,8 @@ var MapRecentButton = "<span>"+ HrefFromURLPlus("http://www.projetorgm.com.br/ma
 var LinksAlvo = "";
 var MapControlsInner = "";     //HTML que vai dentro do LegendControl ControlesDoMapa
 var MapaEmbutido = MapIsEmb();
+var HeatLayer = L.heatLayer([], { minZoom: 5, maxZoom: 17 });
+var ClusterLayer = new L.MarkerClusterGroup();
 
 //Os links dos botões devem abrir fora do iframe ou quadro onde o mapa foi embutido
 if ( MapaEmbutido ) {
@@ -311,28 +313,76 @@ $(".rgm-map-recent-button").click(function(e) {
 });
 
 
-//adiciona uma camada no mapa, e armazena informações. Dados = Array, 0 = mapbox ID e 1 = Apelido 
+//adiciona uma camada no mapa, e armazena informações. Dados = Array, 0 = mapbox ID | 1 = Apelido | 2 = heat ou cluster layer
+//MapNick = Apelido do mapa 
+//HeatLayer e ClusterLayer são os nomes dados para as variáveis
+//O mapa só possui 1 camada Heat ou Cluster. Todas camadas adicionadas serão agrupadas em uma única Heat ou Cluster se especificadas
+//A primeira camada dá o nome para o grupo.  
 function AddMBLayerInTheMap(DadosRaw) {
 	var MapID = null;
 	var MapNick = null;
+	var LayerGroup = null;  //Cluster or Heat
+	
 	var Dados = DadosRaw.split(',');
-	MapID = Dados[0]; 		 
-	MapNick = Dados[1];
-	 		 
-	if ( MapNick == null ) {				 
+	MapID      = Dados[0]; 		 
+	MapNick    = Dados[1];
+	LayerGroup = Dados[2];
+	
+	if ( MapNick == null || MapNick == "" ) {				 
 			return false;
-	}else { //Podemos continuar...	
-		MapNick = MapNick.substr(0, 20);		
-		RawOverlaysMB[RawOverlaysMB.length] = MapID + "," + MapNick; //Salva camada como dados brutos		
+	}else { 
+		//Podemos continuar...
+		MapNick = MapNick.substr(0, 20);  //Tamanho máximo para o apelido da camada		
 		var MBName = MapID.replace(".","_");	
 		var Indice = OverlaysMB.length;
+		//Cria camada... até aqui tudo bem...
 		OverlaysMB[Indice] = L.mapbox.featureLayer(MapID);
-		ControlLayers.addOverlay(OverlaysMB[Indice], MapNick);
-		map.addLayer(OverlaysMB[Indice]); 
+
+		//Se for Layer comum, OK. Mas se for Layer agrupada, temos de tratar corretamente	
+		if ( LayerGroup != null && LayerGroup != ""  ) {
 		
-		OverlaysMB[Indice].on('ready', function(){
-			map.fitBounds(OverlaysMB[Indice].getBounds());
-		});
+			//Salva camada como dados brutos
+			RawOverlaysMB[RawOverlaysMB.length] = MapID + "," + MapNick + "," + LayerGroup;
+			//A camada é agrupada. Temos de saber de que tipo e tratar...
+			//Verificar se a camada pertence a um grupo e adicionar no mapa se necessário
+			//Se não tem no mapa, adiciona usando título da primeira camada
+			switch(LayerGroup) {
+				case 'h':					
+						//Adiciona no grupo
+						OverlaysMB[Indice].on('ready', function(){
+								OverlaysMB[Indice].eachLayer(function(l) {
+		  							HeatLayer.addLatLng(l.getLatLng());
+		  						});
+						});
+						
+						if( !map.hasLayer(HeatLayer)  ) { 
+								ControlLayers.addOverlay(HeatLayer, MapNick);
+								map.addLayer(HeatLayer);
+						}
+				break;		
+				case 'c':
+					OverlaysMB[Indice].on('ready', function(){
+							//Adiciona no grupo
+							ClusterLayer.addLayer(OverlaysMB[Indice]);
+					});
+				
+					if( !map.hasLayer(ClusterLayer)  ) { 
+							ControlLayers.addOverlay(ClusterLayer, MapNick);
+							map.addLayer(ClusterLayer);
+					}
+				break;		
+			}				 
+		}else {
+			//Salva camada como dados brutos
+			RawOverlaysMB[RawOverlaysMB.length] = MapID + "," + MapNick;
+			//Se camada comum, vai para o ControlLayers
+			ControlLayers.addOverlay(OverlaysMB[Indice], MapNick);
+			map.addLayer(OverlaysMB[Indice]); 
+			OverlaysMB[Indice].on('ready', function(){
+				map.fitBounds(OverlaysMB[Indice].getBounds());
+			});
+		}
+		
 		return true;
 	}
 }
