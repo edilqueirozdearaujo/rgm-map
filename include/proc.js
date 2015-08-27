@@ -366,7 +366,7 @@ function AddMBLayerInTheMap(DadosRaw) {
 							ClusterLayer.addLayer(OverlaysMB[Indice]);
 					});
 				
-					if( !map.hasLayer(ClusterLayer)  ) { 
+					if( !map.hasLayer(ClusterLayer)  ) {
 							ControlLayers.addOverlay(ClusterLayer, MapNick);
 							map.addLayer(ClusterLayer);
 					}
@@ -386,3 +386,4 @@ function AddMBLayerInTheMap(DadosRaw) {
 		return true;
 	}
 }
+

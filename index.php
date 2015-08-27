@@ -210,6 +210,7 @@ else{
 	Linha("		var RawOverlaysMB = []; //Overlays como dados brutos");		
 	Linha("		var OverlaysMB = []; //Feature layers");		
 	Linha("		var map = L.mapbox.map('mapdiv'); //Cria o mapa");
+	Linha("		map.MaxZoom = 19;");
 	TryMapSetView(); //Para evitar o erro:  "Error: Set map center and zoom first"
 	Linha("		var MapHash = L.hash(map);");
 	Linha("		lMNK.addTo(map);");  
