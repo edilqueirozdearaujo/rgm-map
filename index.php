@@ -207,10 +207,15 @@ else{
  	Linha("<div id='geocode-selector'></div>");
  	Linha("<div id='mapdiv'></div>");
 	Linha("<script>");		
+	Linha("		var HeatLayer = L.heatLayer([], { minZoom: 5, maxZoom: 17 });");		
+	Linha("		var ClusterLayer = new L.MarkerClusterGroup();");		
+	
 	Linha("		var RawOverlaysMB = []; //Overlays como dados brutos");		
 	Linha("		var OverlaysMB = []; //Feature layers");		
 	Linha("		var map = L.mapbox.map('mapdiv'); //Cria o mapa");
-	Linha("		map.MaxZoom = 19;");
+//	Linha("		map.MaxZoom = 19;");
+//	Linha("		map._layersMaxZoom=19;");
+	Linha("		map.options.maxZoom = 19;");
 	TryMapSetView(); //Para evitar o erro:  "Error: Set map center and zoom first"
 	Linha("		var MapHash = L.hash(map);");
 	Linha("		lMNK.addTo(map);");  

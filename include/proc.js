@@ -6,8 +6,6 @@ var MapRecentButton = "<span>"+ HrefFromURLPlus("http://www.projetorgm.com.br/ma
 var LinksAlvo = "";
 var MapControlsInner = "";     //HTML que vai dentro do LegendControl ControlesDoMapa
 var MapaEmbutido = MapIsEmb();
-var HeatLayer = L.heatLayer([], { minZoom: 5, maxZoom: 17 });
-var ClusterLayer = new L.MarkerClusterGroup();
 
 //Os links dos botões devem abrir fora do iframe ou quadro onde o mapa foi embutido
 if ( MapaEmbutido ) {
