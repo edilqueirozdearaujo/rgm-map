@@ -48,13 +48,13 @@ function TrySetBaseLayer($SetBaseLayer) {
 	}
 }
 
-function LoadMapSetView($Dados) {
+function LoadMapSetView($XYZ) {
 	global $MapSetView;
-	if( !Vazio($Dados) ) {
-		$XYZ = explode("/", $Dados);	
-		$MapSetView["Lat"]  = $XYZ[1];
-		$MapSetView["Lon"]  = $XYZ[2];
-		$MapSetView["Zoom"] = $XYZ[0];
+	if( !Vazio($XYZ) ) {
+		//$XYZ = explode("/", $Dados);	
+		$MapSetView["Lat"]  = $XYZ["Lat"];
+		$MapSetView["Lon"]  = $XYZ["Lon"];
+		$MapSetView["Zoom"] = $XYZ["Zoom"];
 	}
 }
 

@@ -123,7 +123,7 @@ elseif (filter_has_var(INPUT_GET,'id')) {
 	 		
 	 		//$Mapa['XYZ'] = $Mapa['Zoom'] . "/"  . $Mapa['Lat'] . "/" . $Mapa['Lon'];	 		  	 		
 	 		
-			LoadMapSetView($Mapa['XYZ']);	//Carrega as configurações do mapa			
+			LoadMapSetView($Mapa);	//Carrega as configurações do mapa			
 			if( !Vazio($Mapa['Titulo'])) { $SetMapTitulo = $Mapa['Titulo'];}
 			if( !Vazio($Mapa['B'])) { $SetBaseLayer = $Mapa['B'];	}
 			if(ProcessarOverlays($Mapa['O'],$OvlTemp)){ $SetOverlay = $OvlTemp;}			
@@ -218,7 +218,7 @@ else{
 	Linha("		map.options.maxZoom = 19;");
 	TryMapSetView(); //Para evitar o erro:  "Error: Set map center and zoom first"
 	Linha("		var MapHash = L.hash(map);");
-	Linha("		lMNK.addTo(map);");  
+	Linha("		lMNK.addTo(map);");  	
 	Linha("</script>");		
 	Linha("<script src='include/proc.js'></script>");
 	Linha("<script>");
@@ -237,7 +237,8 @@ else{
 
 		//Existe OverLayer customizada?
 		Linha(" ");
-		if( isset($SetOverlayMB) ) { MostrarOverlaysMB($SetOverlayMB); }
+		if( isset($SetOverlayMB) ) { MostrarOverlaysMB($SetOverlayMB);}
+//		else { TryMapSetView(); }
 		
       if( isset( $SetMapLegend ) ) {
       	
