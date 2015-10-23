@@ -13,39 +13,11 @@ include_once "include/phpqrcode.php";
 
 
 //======= Only for this page
-	$MinhaURL 	   = $_SERVER['PHP_SELF'];
-	$MinhaURL = NoIndexPHP($MinhaURL);	
-	$SessionName = 'rgm-map';	
+//	$MinhaURL 	   = $_SERVER['PHP_SELF'];
+//	$MinhaURL = NoIndexPHP($MinhaURL);	
 	$MapaDefinido = 0;	
 
-//======= Pre-process
-	//RedirectIfNotIsHTTPS(cDominioFullURLSSL . $MinhaURL); //Força HTTPS
-	//Some browsers are blocking code like overpass API, claiming insecure
-	RedirectIfIsHTTPS(cDominioFullURL . $MinhaURL);	 
-	//session_start();
-	$SemErro = FALSE;
-	$SemErro = SecSessionStart($SessionName,TRUE);
-	if( !$SemErro ) {	$SemErro = SecSessionStart($SessionName,FALSE);}	
 
-	$IsMobileBrowser = IsMobileBrowser();
-
-	// (geralmente, a primeira visita ao site)
-	if( !isset($_SESSION['Lang']) || !isset($_SESSION['Country'])) {
-	   $_SESSION['Lang']    = "pt";
-	}
-	SetLanguage($_SESSION['Lang']);	
-
-
-//======= Pre-process
-//	Pre-action
-
- //exit volta ao início da página
- if (filter_has_var(INPUT_POST,'exit')) { 	
-	 ClearVars(); 	 
- 	 RedirecionarPHP($MinhaURL);
- }
-/* elseif (...) {
- }*/
  
 /* 
 //desativando suporte por URLs
@@ -164,7 +136,10 @@ elseif (filter_has_var(INPUT_GET,'id')) {
 	<script src='https://api.tiles.mapbox.com/mapbox.js/v2.2.1/mapbox.js'></script>
 	<link href='https://api.tiles.mapbox.com/mapbox.js/v2.2.1/mapbox.css' rel='stylesheet' />
 	<link href='//mapbox.com/base/latest/base.css' rel='stylesheet' />
-	<script> L.mapbox.accessToken   = ""; </script>
+	<script> 
+		L.mapbox.accessToken   = "";
+		var MapillaryID =	""; //https://a.mapillary.com/  
+	</script>
 
 	<!-- Mapbox Leaflet Locate plugin  -->
 	<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.24.0/L.Control.Locate.js'></script>

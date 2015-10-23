@@ -176,6 +176,58 @@ var olNASC = new L.OverPassLayer({
 //ControlLayers.addOverlay(olUTIL, 'Utilidades básicas');								
 //ControlLayers.addOverlay(layer_oplLixo, 'Onde jogar lixo?');
 
+
+//MAPILLARY       ******************************************************************
+//https://www.mapbox.com/mapbox.js/example/v1.0.0/images-from-mapillary/
+/*
+var API_ENDPOINT = 'https://api.mapillary.com/v1/im/search?' +
+    'min-lat=SOUTH&max-lat=NORTH&min-lon=WEST&max-lon=EAST&' +
+    'max-results=100&geojson=true';
+*/    
+    
+var API_ENDPOINT = "";
+
+function MapillaryImg(Key,Width) {
+	return 'https://d1cuyjsrcm0gby.cloudfront.net/' + Key + '/thumb-'+ Width + '.jpg';
+}
+
+function MapillaryImgHref(Key) {
+	var Img = '<img alt="foto..." src="' + MapillaryImg(Key,320)  + '" />';
+	var Link = "http://mapillary.com/map/im/"+ Key +"/photo";
+	
+	
+	return HrefFromURLPlus(Link,'','',Img,'_parent'); 
+}
+
+
+function GetAPI_ENDPOINT() {
+	S = map.getBounds().getSouth();    
+	N = map.getBounds().getNorth();    
+	W = map.getBounds().getWest();    
+	E = map.getBounds().getEast();    
+	
+
+	return "https://a.mapillary.com/v2/search/im/geojson?client_id=" + MapillaryID 
+	+ "&max_lat=" + N +"&max_lon="+E+"&min_lat="+S+"&min_lon="+W+"&limit=200&page=0";	
+}
+
+var olMPLL = L.mapbox.featureLayer()
+    .on('layeradd', function(e) {
+        //e.layer.bindPopup('<img src="' + MapillaryImg(e.layer.feature.properties.key,320)  + '" />', {
+        e.layer.bindPopup(MapillaryImgHref(e.layer.feature.properties.key,320), {
+            minWidth: 200
+        });
+    });
+ 
+ //olMPLL.addTo(map);   
+
+//API_ENDPOINT = GetAPI_ENDPOINT();
+olMPLL.loadURL(GetAPI_ENDPOINT());
+   
+ 
+
+
+ControlLayers.addOverlay(olMPLL, 'Fotos do Mapillary');								
 ControlLayers.addOverlay(olNASC, 'Nascentes');								
 ControlLayers.addTo(map);
 
@@ -203,15 +255,11 @@ function CheckOverpassLayers() {
 }
 
 map.on('overlayadd', function(e) {
-	 //AttrIfLayerIsOn( olMPLL, attrMapillary );		     
-	 AttrIfLayerIsOn( olMMA, attrMMA );		     
-	 AttrIfLayerIsOn( olMBH, attrPrefMRG );
+	 AttrIfLayerIsOn( olMPLL, attrMapillary );		     
 	 CheckOverpassLayers();
  });
 map.on('overlayremove', function(e) {
-	 //AttrIfLayerIsOn( olMPLL, attrMapillary );		     
-	 AttrIfLayerIsOn( olMMA, attrMMA );		     
-	 AttrIfLayerIsOn( olMBH, attrPrefMRG );
+	 AttrIfLayerIsOn( olMPLL, attrMapillary );		     
 	 CheckOverpassLayers();		     
  });
    
@@ -220,7 +268,11 @@ map.on('overlayremove', function(e) {
 
 AtualizarControlesDoMapa();			
 map.on('moveend', function(e) {
-	AtualizarControlesDoMapa();					
+	AtualizarControlesDoMapa();	
+
+
+		olMPLL.loadURL(GetAPI_ENDPOINT()); //BETA
+					
 });	
 
 /*DEPRECATED

@@ -2,7 +2,7 @@
 var Sep = ' | ';
 var attrOSM         = '<a href="http://www.openstreetmap.org/copyright" title="Termos e condições" >contribuidores do OpenStreetMap</a>'; 
 var attrMapboxjs    = attrOSM + Sep + '<a href="https://www.mapbox.com/design/" title="Mapbox" >Mapbox.js</a>';
-var attrMapillary   = "<a href='https://mapillary.com/'>Images from Mapillary</a>";
+var attrMapillary   = "<a href='https://mapillary.com/'>Imagens do Mapillary - Envie fotos você também</a>";
 var attrMMA         = "<a href='http://www.mma.gov.br/areas-protegidas/cadastro-nacional-de-ucs'>Ministério do Meio Ambiente</a>";
 var attrPrefMRG     = "<a href='http://ribeiraogrande.sp.gov.br/'>Prefeitura Municipal de Ribeirão Grande</a>";
 var attrOverPass    = 'POI via <a href="http://www.overpass-api.de/">Overpass API</a>';
@@ -35,5 +35,6 @@ var lMBO = L.mapbox.tileLayer('mapbox.outdoors');
 var lMBR = L.mapbox.tileLayer('mapbox.pirates');
 var lMBW = L.mapbox.tileLayer('mapbox.wheatpaste');
 var lMBB = L.mapbox.tileLayer('mapbox.run-bike-hike');
-var lMBP = L.mapbox.tileLayer('mapbox.pencil');
-//       ******************************************************************
+var lMBP = L.mapbox.tileLayer('mapbox.pencil'); 
+    
+    

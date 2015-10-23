@@ -31,7 +31,7 @@ function IsValidLayer($Test){
 function IsValidOverlay($Test){
 	$IsLayer = FALSE;
 	$Test = $Test . ",";
-	$Layers = "Mapillary,ALIM,ACOM,ACOM,TURI,TRSP,NASC,UTIL,MPLL,MMA,MBH,";
+	$Layers = "Mapillary,MPLL,";
 	if( StrPosicao($Test,$Layers) > 0 ) {
 		$IsLayer = TRUE;
 	} 
