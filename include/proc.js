@@ -19,21 +19,23 @@ var MapBaseLayersSelect = "<form id='rgm-map-controles' method='post' >"+MapAddL
 		+"<select id='map-select-layer' name='share-b' >"
 			+"<option value='lMNK' >OpenStreetMap</option>"  
 			+"<option value='lMKG' >OSM Tons de cinza</option>"
-			+"<option value='lMBL' >Light Mapbox</option>"  
-			+"<option value='lMBD' >Dark Mapbox</option>"
-			+"<option value='lOTD' >Ar livre</option>"
-			+"<option value='lMBO' >Ar livre Mapbox</option>"
-			+"<option value='lCYL' >Ciclistas</option>"
-			+"<option value='lMBB' >Bike</option>"
-			+"<option value='lMBP' >Lápis</option>"
-			+"<option value='lMBC' >Comic</option>"
-			+"<option value='lMBR' >Piratas</option>"
-			+"<option value='lSTW' >Aquarela</option>"
-			+"<option value='lSTL' >Toner Light</option>"
-			+"<option value='lSTT' >Toner Dark</option>"
-			+"<option value='lMBW' >Poster Lambe-lambe</option>"
-			+"<option value='lMBS' >Satélite Mapbox</option>"
-			+"<option value='lESR' >Satélite lESR</option>"
+			+"<option value='lMBL' >Mapbox Light</option>"  
+			+"<option value='lMBD' >Mapbox Dark</option>"
+			+"<option value='lMBS' >Mapbox Streets</option>"
+			+"<option value='lMBT' >Mapbox Satellite</option>"
+			+"<option value='lMBO' >Mapbox Outdoors</option>"
+			+"<option value='lMBB' >Mapbox Run - Bike</option>"
+			+"<option value='lMBP' >Mapbox Pencil</option>"
+			+"<option value='lMBC' >Mapbox Comic</option>"
+			+"<option value='lMBR' >Mapbox Pirates</option>"
+			+"<option value='lMBW' >Mapbox Wheatpaste</option>"
+			+"<option value='lOTD' >Outdoors</option>"
+			+"<option value='lCYL' >Cycle</option>"
+			+"<option value='lLSC' >Landscape</option>"
+			+"<option value='lTPD' >Transport Dark</option>"
+			+"<option value='lSTW' >Stamen Watercolor</option>"
+			+"<option value='lSTL' >Stamen Toner Light</option>"
+			+"<option value='lSTT' >Stamen Toner Dark</option>"
 			+"<option value='lIBR' >IBGE Rural</option>"
 			+"<option value='lIBU' >IBGE Urbano</option>"
 		+"</select>"+ MapShareButton
@@ -64,6 +66,8 @@ function ChangeLayer(Opcao) {
 		case 'lOTD' : sLayer = lOTD; break;	
 		case 'lMBO' : sLayer = lMBO; break;	
 		case 'lCYL' : sLayer = lCYL; break;	
+		case 'lLSC' : sLayer = lLSC; break;	
+		case 'lTPD' : sLayer = lTPD; break;	
 		case 'lMBB' : sLayer = lMBB; break;	
 		case 'lMBP' : sLayer = lMBP; break;	
 		case 'lMBC' : sLayer = lMBC; break;	
@@ -73,23 +77,13 @@ function ChangeLayer(Opcao) {
 		case 'lSTT' : sLayer = lSTT; break;	
 		case 'lMBW' : sLayer = lMBW; break;	
 		case 'lMBS' : sLayer = lMBS; break;	
-		case 'lESR' : sLayer = lESR; break;	
+		case 'lMBT' : sLayer = lMBT; break;		
 		case 'lIBR' : sLayer = lIBR; break;	
 		case 'lIBU' : sLayer = lIBU; break;	
 	}	
 	
 	//remove camadas existentes
 	RmBaseLayers(); //Apenas as baselayers, preserve as overlays
-	//map.eachLayer(function(layer) { map.removeLayer(layer); });
-/*
-    if (map.hasLayer(sLayer)) {
-            map.removeLayer(sLayer);
-            this.className = '';
-    } else {
-            map.addLayer(sLayer);
-            this.className = 'active';
-    }
-*/    	
    map.addLayer(sLayer);
 }
 
@@ -136,9 +130,11 @@ function AtualizarControlesDoMapa() {
 
 
 var BaseLayers = {};	
-var Overlays = {'Fotos do Mapillary'       : olMPLL};	
+//DEPRECATED var Overlays = {'Fotos do Mapillary'       : olMPLL};	
+var Overlays = {};	
 var ControlLayers = L.control.layers( BaseLayers, Overlays, {position: 'topright', collapsed: true});
 
+/*
 var layer_oplAlimentacao = new L.OverPassLayer({
 	   query: "( node(BBOX)['amenity'='cafe']; node(BBOX)['amenity'='fast_food'];  node(BBOX)['amenity'='restaurant']; node(BBOX)['amenity'='ice_cream']; );out;"
 });
@@ -156,30 +152,31 @@ var layer_oplTransporte = new L.OverPassLayer({
 var layer_oplBasicos = new L.OverPassLayer({
 	   query: "( node(BBOX)['amenity'='post_office']; node(BBOX)['amenity'='police']; node(BBOX)['amenity'='pharmacy']; node(BBOX)['amenity'='hospital'];  node(BBOX)['amenity'='atm']; node(BBOX)['amenity'='bank']; );out;"   
 });
-var layer_oplNasc = new L.OverPassLayer({
-	   query: "( node(BBOX)['natural'='spring']; );out;"   
-});
 var layer_oplLixo = new L.OverPassLayer({
 	   query: "( node(BBOX)['amenity'='waste_disposal']; node(BBOX)['amenity'='waste_basket']; node(BBOX)['amenity'='recycling'];  node(BBOX)['amenity'='recycling']; );out;"   
 });
 
-
-var olMPLL = olMPLL;
 var olALIM = layer_oplAlimentacao;
 var olACOM = layer_oplAcomodacao;
 var olTURI = layer_oplTurismo;
 var olTRSP = layer_oplTransporte;
 var olUTIL = layer_oplBasicos;
-var olNASC = layer_oplNasc;
 
-ControlLayers.addOverlay(olALIM, 'Onde se alimentar?');
-ControlLayers.addOverlay(olACOM, 'Onde dormir?');				
-ControlLayers.addOverlay(olTURI, 'Turismo');				
-ControlLayers.addOverlay(olTRSP, 'Transporte');				
-ControlLayers.addOverlay(olUTIL, 'Utilidades básicas');								
-ControlLayers.addOverlay(olNASC, 'Nascentes');								
+*/
+var olNASC = new L.OverPassLayer({
+	   query: "( node(BBOX)['natural'='spring']; );out;"   
+});
+
+
+
+//ControlLayers.addOverlay(olALIM, 'Onde se alimentar?');
+//ControlLayers.addOverlay(olACOM, 'Onde dormir?');				
+//ControlLayers.addOverlay(olTURI, 'Turismo');				
+//ControlLayers.addOverlay(olTRSP, 'Transporte');				
+//ControlLayers.addOverlay(olUTIL, 'Utilidades básicas');								
 //ControlLayers.addOverlay(layer_oplLixo, 'Onde jogar lixo?');
 
+ControlLayers.addOverlay(olNASC, 'Nascentes');								
 ControlLayers.addTo(map);
 
 L.control.locate().addTo(map);
@@ -198,7 +195,7 @@ var Escala = L.control.scale({
 Escala.addTo(map);
 
 function CheckOverpassLayers() {
-	if ( map.hasLayer(olALIM) || map.hasLayer(olACOM) || map.hasLayer(olTURI) || map.hasLayer(olTRSP)|| map.hasLayer(olUTIL) || map.hasLayer(olNASC) ) {			
+	if ( map.hasLayer(olNASC) ) {			
 	     map.attributionControl.addAttribution(attrOverPass);
 	}else {
 	     map.attributionControl.removeAttribution(attrOverPass);
@@ -206,13 +203,13 @@ function CheckOverpassLayers() {
 }
 
 map.on('overlayadd', function(e) {
-	 AttrIfLayerIsOn( olMPLL, attrMapillary );		     
+	 //AttrIfLayerIsOn( olMPLL, attrMapillary );		     
 	 AttrIfLayerIsOn( olMMA, attrMMA );		     
 	 AttrIfLayerIsOn( olMBH, attrPrefMRG );
 	 CheckOverpassLayers();
  });
 map.on('overlayremove', function(e) {
-	 AttrIfLayerIsOn( olMPLL, attrMapillary );		     
+	 //AttrIfLayerIsOn( olMPLL, attrMapillary );		     
 	 AttrIfLayerIsOn( olMMA, attrMMA );		     
 	 AttrIfLayerIsOn( olMBH, attrPrefMRG );
 	 CheckOverpassLayers();		     
@@ -226,11 +223,12 @@ map.on('moveend', function(e) {
 	AtualizarControlesDoMapa();					
 });	
 
+/*DEPRECATED
 refreshMapillary();
 map.on('dragend', function(e) {
 	refreshMapillary();					
 });	
-
+*/
 //thanks to http://jsfiddle.net/3fdCD/ from http://stackoverflow.com/questions/22119535/having-trouble-with-leaflet-removelayer
 $("#map-select-layer").change(function() {
 	var Opcao = $("#map-select-layer option:selected").val();

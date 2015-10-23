@@ -160,11 +160,11 @@ elseif (filter_has_var(INPUT_GET,'id')) {
 	<link href="css/geral.css" rel="stylesheet" type="text/css"/>	
 	<link href="css/map.css" rel="stylesheet" type="text/css"/>	
 	<link rel="shortcut icon" href="imagens/favicon.png" type="image/png"/>
-	<script src="include/funcoes.js"></script>
 	<!-- Mapbox  -->
 	<script src='https://api.tiles.mapbox.com/mapbox.js/v2.2.1/mapbox.js'></script>
 	<link href='https://api.tiles.mapbox.com/mapbox.js/v2.2.1/mapbox.css' rel='stylesheet' />
 	<link href='//mapbox.com/base/latest/base.css' rel='stylesheet' />
+	<script> L.mapbox.accessToken   = ""; </script>
 
 	<!-- Mapbox Leaflet Locate plugin  -->
 	<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.24.0/L.Control.Locate.js'></script>
@@ -190,7 +190,9 @@ elseif (filter_has_var(INPUT_GET,'id')) {
 	<link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' />
 
 	<script src="include/jquery.min.js" ></script>
-	<script src='include/leafletrout.js'></script>
+	<script src='include/providers.js'></script>
+	<script src="include/funcoes.js"></script>
+
 </head>
 <body>	
 <?

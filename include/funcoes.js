@@ -59,7 +59,8 @@ function GetLinkOSMR(Lat,Lon) {
 }
 
 function GetLinkMapillary(Lat,Lon) {
-	var Link = "http://www.mapillary.com/map/im/18/" + Lat + "/" + Lon;
+//	var Link = "http://www.mapillary.com/map/im/18/" + Lat + "/" + Lon;
+	var Link = "http://www.mapillary.com/map/search/" + Lat + "/" + Lon + "/13";
 	return Link;
 }
 
@@ -106,3 +107,43 @@ function MapIsEmb() {
   return parentURL; 
 }
 
+
+function AttrIfLayerIsOn( Camada, Attr ) {
+	if ( map.hasLayer( Camada )) {			
+	     map.attributionControl.addAttribution(Attr);
+	}else {
+	     map.attributionControl.removeAttribution(Attr);
+	}	
+}
+
+function RmIfLIsOn( Camada ) {
+	if ( map.hasLayer( Camada )) {
+	      map.removeLayer(Camada);
+	}	
+}
+
+
+//Precisa ser escrita de uma forma mais prática, mas tá funcionando por enquanto :P
+function RmBaseLayers() {
+	RmIfLIsOn( lMNK );
+	RmIfLIsOn( lMKG );
+	RmIfLIsOn( lMBL );
+	RmIfLIsOn( lMBD );
+	RmIfLIsOn( lOTD );
+	RmIfLIsOn( lMBO );
+	RmIfLIsOn( lCYL );
+	RmIfLIsOn( lLSC );
+	RmIfLIsOn( lTPD );
+	RmIfLIsOn( lMBB );
+	RmIfLIsOn( lMBP );
+	RmIfLIsOn( lMBC );
+	RmIfLIsOn( lMBR );
+	RmIfLIsOn( lSTW );
+	RmIfLIsOn( lSTL );
+	RmIfLIsOn( lSTT );
+	RmIfLIsOn( lMBW );
+	RmIfLIsOn( lMBS );
+	RmIfLIsOn( lMBT );
+	RmIfLIsOn( lIBR );
+	RmIfLIsOn( lIBU );
+}
