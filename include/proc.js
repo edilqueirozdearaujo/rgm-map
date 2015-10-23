@@ -132,7 +132,7 @@ function AtualizarControlesDoMapa() {
 var BaseLayers = {};	
 //DEPRECATED var Overlays = {'Fotos do Mapillary'       : olMPLL};	
 var Overlays = {};	
-var ControlLayers = L.control.layers( BaseLayers, Overlays, {position: 'topright', collapsed: true});
+var ControlLayers = L.control.layers( BaseLayers, Overlays, {position: 'topright', collapsed: false});
 
 /*
 var layer_oplAlimentacao = new L.OverPassLayer({
@@ -219,12 +219,10 @@ var olMPLL = L.mapbox.featureLayer()
         });
     });
  
- //olMPLL.addTo(map);   
 
 //API_ENDPOINT = GetAPI_ENDPOINT();
 olMPLL.loadURL(GetAPI_ENDPOINT());
-   
- 
+olMPLL.addTo(map);
 
 
 ControlLayers.addOverlay(olMPLL, 'Fotos do Mapillary');								
