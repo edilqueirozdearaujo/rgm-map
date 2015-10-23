@@ -17,9 +17,8 @@ $MapSetView["Zoom"] = "10";
 
 function IsValidLayer($Test){
 	$IsLayer = FALSE;
-	$Test = $Test . ",";
-
-	$Layers = "lMNK,lMKG,lOTD,lCYL,lESR,lIBR,lIBU,lSTW,lSTT,lSTL,lMBC,lMBS,lMBL,lMBD,lMBO,lMBP,lMBW,lMBB,lMBR,";
+	$Test = $Test . ",";	
+	$Layers = "lMNK,lMKG,lMBL,lMBD,lMBS,lMBT,lMBO,lMBB,lMBP,lMBC,lMBR,lMBW,lOTD,lCYL,lLSC,lTPD,lSTW,lSTL,lSTT,lIBR,lIBU,";
 	
 	if( StrPosicao($Test,$Layers) > 0 ) {
 		$IsLayer = TRUE;
