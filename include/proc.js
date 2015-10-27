@@ -179,11 +179,6 @@ var olNASC = new L.OverPassLayer({
 
 //MAPILLARY       ******************************************************************
 //https://www.mapbox.com/mapbox.js/example/v1.0.0/images-from-mapillary/
-/*
-var API_ENDPOINT = 'https://api.mapillary.com/v1/im/search?' +
-    'min-lat=SOUTH&max-lat=NORTH&min-lon=WEST&max-lon=EAST&' +
-    'max-results=100&geojson=true';
-*/    
     
 var API_ENDPOINT = "";
 
@@ -211,18 +206,35 @@ function GetAPI_ENDPOINT() {
 	+ "&max_lat=" + N +"&max_lon="+E+"&min_lat="+S+"&min_lon="+W+"&limit=200&page=0";	
 }
 
+var MapillaryIcon =  L.mapbox.marker.icon({
+        'marker-size': 'large',
+        'marker-symbol': 'camera',
+        'marker-color': '#1087bf'
+    })
+
+
 var olMPLL = L.mapbox.featureLayer()
     .on('layeradd', function(e) {
         //e.layer.bindPopup('<img src="' + MapillaryImg(e.layer.feature.properties.key,320)  + '" />', {
         e.layer.bindPopup(MapillaryImgHref(e.layer.feature.properties.key,320), {
             minWidth: 200
-        });
+        });        
+    })
+  	.on('ready', function(layer) {
+	    this.eachLayer(function(marker) {
+	         // See the following for styling hints:
+	         // https://help.github.com/articles/mapping-geojson-files-on-github#styling-features
+	         marker.setIcon(MapillaryIcon);
+	    });         
     });
+
+
  
 
 //API_ENDPOINT = GetAPI_ENDPOINT();
 olMPLL.loadURL(GetAPI_ENDPOINT());
 olMPLL.addTo(map);
+AttrIfLayerIsOn( olMPLL, attrMapillary );
 
 
 ControlLayers.addOverlay(olMPLL, 'Fotos do Mapillary');								
