@@ -16,16 +16,18 @@ include_once "include/phpqrcode.php";
 //	$MinhaURL 	   = $_SERVER['PHP_SELF'];
 //	$MinhaURL = NoIndexPHP($MinhaURL);	
 	$MapaDefinido = 0;	
+	$MinhaURL = "/map/";
 
-
+	SecSessionStart('rgm-map',FALSE);
  
-/* 
-//desativando suporte por URLs
 
  //Baselayer foi escolhida por URL?
+ //Baselayer pode ser sobrescrita se ID for especificado
  if (filter_has_var(INPUT_GET,'layer')) {
  	   $SetBaseLayer = filter_input(INPUT_GET,'layer',FILTER_SANITIZE_STRING);
  }
+
+/* 
  //Overlay foi escolhida por URL?
  if (filter_has_var(INPUT_GET,'overlay')) {
  	   $SetOverlayTemp = filter_input(INPUT_GET,'overlay',FILTER_SANITIZE_STRING);
@@ -40,12 +42,29 @@ include_once "include/phpqrcode.php";
  	   }
  }
 */
-
-if (filter_has_var(INPUT_GET,'m')) {
-	$MapasRecentes = filter_input(INPUT_GET,'m',FILTER_SANITIZE_STRING);
+//Mecanismo para evitar reenvio do método POST
+if( isset($_SESSION['FormSubmit']) ) {
+	unset($_SESSION['FormSubmit']);
+	$Rdr = '';
+	if( isset($_SESSION['FormSubmitID']) ) {
+		 $Rdr = "?id=".$_SESSION['FormSubmitID']; 
+		  unset($_SESSION['FormSubmitID']);
+	}
+	RedirecionarPHP($MinhaURL . $Rdr);				
+}
+elseif (filter_has_var(INPUT_GET,'pg')) {
+	$MapasRecentes = filter_input(INPUT_GET,'pg',FILTER_SANITIZE_STRING);
 	if( $MapasRecentes < 1 ) { $MapasRecentes = 1; }
 }
+//Opção compartilhar:
+//Ao compartilhar o mapa, o título é opcional. 
+//   Com título o mapa é salvo no banco de dados, e assim é possível obter um ID e salvar as camadas
+//   Sem título compartilha apenas coordenadas e camada ativa   
 elseif (filter_has_var(INPUT_POST,'share-id')) {
+	//Mecanismo para evitar reenvio do método POST
+	$_SESSION['FormSubmit'] = TRUE;	
+		
+	
 	$Data = date("Y-m-d");
 	$Hora = date("H:i:s");
 	$ID  = FromBase36(filter_input(INPUT_POST,'share-id',FILTER_SANITIZE_STRING));
@@ -67,25 +86,37 @@ elseif (filter_has_var(INPUT_POST,'share-id')) {
 	$B[0] = " ";
 	$B = trim($B);
 	
-	//Novo mapa? Cadastra e pega ID
-	if( $ID == 0 ) {
-		$ProximoID = 0;
-		$Res = DBServerConnect();
-		if( DBIsConnected($Res)) {
-			if (DBSelect(cDBName)){
-				$ProximoID = GetNextTableID("RGMMap");					
-				$SQL = "INSERT INTO RGMMap (B,O,MB,Lat,Lon,Zoom,Data,Hora,Titulo,Descricao) VALUES ('$B','$O','$MB','$Lat','$Lon','$Zoom','$Data','$Hora','$Tit','$Dsc');";
-				$ExeSQL = mysql_query($SQL);
+	
+	$ProximoID = 0;				 
+	//Novo mapa? Cadastra e pega ID (além de zero, DEVE TER um título)
+	if( $ID == 0) {
+		if(Vazio($Tit)){
+			$CompartilharMapa["ID"]   = 0;		//Caso especial, define valor para zero
+			$CompartilharMapa["Zoom"] = $Zoom;		
+			$CompartilharMapa["Lat"]  = $Lat;		
+			$CompartilharMapa["Lon"]  = $Lon;		
+			$CompartilharMapa["B"]    = $B;		
+		}else {
+			$Res = DBServerConnect();
+			if( DBIsConnected($Res)) {
+				if (DBSelect(cDBName)){
+					$ProximoID = GetNextTableID("RGMMap");	
+					$_SESSION['FormSubmitID'] = ToBase36($ProximoID);				
+					$SQL = "INSERT INTO RGMMap (B,O,MB,Lat,Lon,Zoom,Data,Hora,Titulo,Descricao) VALUES ('$B','$O','$MB','$Lat','$Lon','$Zoom','$Data','$Hora','$Tit','$Dsc');";
+					$ExeSQL = mysql_query($SQL);
+				}
+				DBServerDisconnect($Res);			
 			}
-			DBServerDisconnect($Res);			
-		}
-	}else {
-		$ProximoID = $ID;
+		}		
+		
 	}
-
-	if( $ProximoID != 0 ) {
+	else {
+		$ProximoID = $ID;				 
+	}
+	
+	if( $ProximoID != 0 ) { 	//DEPRECATED
 		$CompartilharMapa["ID"] = ToBase36($ProximoID);
-	}		
+	}			
 }
 elseif (filter_has_var(INPUT_GET,'id')) {
  	 $MapID = filter_input(INPUT_GET,'id',FILTER_SANITIZE_STRING);
@@ -178,7 +209,7 @@ Linha("<!--entrou no comando-->");
 	MostrarMapasRecentes($Ini,$Fin);		
 }
 elseif(isset($CompartilharMapa)){	
-	CompartilharMapa($CompartilharMapa['ID']);	
+	CompartilharMapa($CompartilharMapa);	
 }
 else{
  	Linha("<div id='geocode-selector'></div>");

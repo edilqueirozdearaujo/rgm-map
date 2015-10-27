@@ -6,7 +6,7 @@
 	define("cTituloSite","Projeto RGM");
 	define("cDominio","projetorgm.com.br");
 	define("cDominioFullURL","http://www.".cDominio);
-	define("cDominioFullURLSSL","https://".cDominio);
+	define("cDominioFullURLSSL","http://".cDominio);
 
 	//--------------------------------------------------------
 	//Database

@@ -2,7 +2,7 @@
 error_reporting(1);
 ini_set("display_errors", 1 );
 
-define("cSiteRGM","<a href='https://projetorgm.com.br/'><img class='alinhar-vertical' src='imagens/favicon.png' width='32px' /> projetorgm.com.br</a>");
+define("cSiteRGM","<a href='http://projetorgm.com.br/'><img class='alinhar-vertical' src='imagens/favicon.png' width='32px' /> projetorgm.com.br</a>");
 define("cMapasPorPagina",200);
 define("cURLBase", "http://www.projetorgm.com.br/map/");
 
@@ -194,21 +194,6 @@ function MostrarOverlaysMB($SetOverlay) {
 
 //HTML OPTIONS ------------------------------------------------------------------------------------------ 
 
-function DrawHeader($MinhaURL) {
-	Linha("<div class='header alinhar-direita'>");
-	Linha( "		<h1 class='item-alinhado alinhar-centro' >".GetMsg('IntroTitle')."</h1>" );
-   Linha("		<p class='item-alinhado itempadl' >".cSiteRGM."</p>");
-   Linha("		<form id='formlang' class='item-alinhado itempadl' action='$MinhaURL' method='post'>");
-   Linha("					<p class='item-alinhado'><img src='imagens/country-translate.png' alt='country...'/></p>");
-   Linha("					<div class='item-alinhado langescolha' onclick=\"CheckElement('country-br',true);document.getElementById('formlang').submit();\" ><img src='imagens/country-br.png' title='Brasil, Português' ><br><input hidden='true' id='country-br' type='radio' name='country' value='BR'></div>");									
-   Linha("     			<div class='item-alinhado langescolha' onclick=\"CheckElement('country-wd', true);document.getElementById('formlang').submit();\" ><img src='imagens/country-wd.png'   title='World, English'><br>   <input hidden='true' id='country-wd' type='radio' name='country' value='WD'></div>");
-   Linha("     			<div class='item-alinhado langescolha' onclick=\"CheckElement('country-es', true);document.getElementById('formlang').submit();\" ><img src='imagens/country-es.png'   title='España, Español'><br>   <input hidden='true' id='country-es' type='radio' name='country' value='ES'></div>");
-   Linha("		</form>");									
-   Linha(" ");									
-
-	Linha("</div>");
-   Linha(" ");									
-}
 
 
 function Footer() {
@@ -223,17 +208,18 @@ function Footer() {
 
 
 
-
-//Isto limpará todas variáveis criadas para seção
-function ClearVars() {
- 	 if( isset($_SESSION['CustomLayer']) ) { unset($_SESSION['CustomLayer']); }
-}
-
-
 //SHARE OPTIONS ------------------------------------------------------------------------------------------ 
-function CompartilharMapa($ID){
+function CompartilharMapa($M){
 	$BaseURL = cURLBase; 
-	$MapURL = $BaseURL . "?id=$ID";	 
+
+	$ID = $M['ID'];
+	$IDNum = FromBase36($ID); 
+	if( $IDNum == 0 ) {
+		$MapURL = $BaseURL . "?layer=".$M['B']."#".$M['Zoom']."/".$M['Lat']."/".$M['Lon'];
+	}else {
+		$MapURL = $BaseURL . "?id=$ID";	 
+	}
+	
 	$Embed = "<iframe src=\"".$MapURL."\" width=\"425\" height=\"350\" frameborder=\"0\" scrolling=\"no\" marginheight=\"0\" marginwidth=\"0\" ></iframe>" ;
 	Linha("<h3><a class='icon prev big button' href='$MapURL' id='voltar-ao-mapa' >VOLTAR AO MAPA</a></h3>");
 	Linha("<div class='alinhar-centro'>");
@@ -243,14 +229,19 @@ function CompartilharMapa($ID){
 	Linha("<p>Embutir:<br><textarea cols='60' onclick='this.select();' >$Embed</textarea></p>");
 	Linha("	<div class='inline'>");	TwitterShare($BaseURL);	Linha("	</div>"); 
 	Linha("	<div class='inline'>");	FBShare($BaseURL); Linha("	</div>"); 
+
+	//QR somente para mapas salvos
+	if( $IDNum != 0 ) {
 	   $FileName =  "share/" . $ID . '.png';
 	   $URL = $MapURL;
 	   $QRCodeW = 6;
 	   if( !file_exists($FileName) ) {
 			QRcode::png($URL,$FileName, "M", $QRCodeW, 2);
 		}	  	
-	Linha("<p></br></p>");
-	Linha("<p>QR Code:<br><img src='$FileName' alt='QR Code'></p>");
+		Linha("<p></br></p>");
+		Linha("<p>QR Code:<br><img src='$FileName' alt='QR Code'></p>");
+	}
+	
 	Linha("</div>");
 }
 

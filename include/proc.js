@@ -1,8 +1,9 @@
 //initialization ************************************************************
 var LinkPrint  = HrefFromURLPlus("#","icon printer","Imprimir","","");
 var MapAddLButton  = "<span >" + HrefFromURLPlus("#","icon plus rgm-map-addl-button","Adicionar mapas","","") + "</span>";
-var MapShareButton = "<span>"+ HrefFromURLPlus("#","icon share rgm-map-share-button","Compartilhe","","") +"</span>"; 
-var MapRecentButton = "<span>"+ HrefFromURLPlus("http://www.projetorgm.com.br/map/?m=1","icon star rgm-map-recent-button","Mapas recentes","","") +"</span>"; 
+var MapShareButton = "<span >"+ HrefFromURLPlus("#","icon share rgm-map-share-button","Compartilhe","","") +"</span>"; 
+var MapRecentButton = "<span>"+ HrefFromURLPlus("http://projetorgm.com.br/map/?pg=1","icon star rgm-map-recent-button","Mapas recentes","","") +"</span>"; 
+var MapHomeButton   = "<span>"+ HrefFromURLPlus("http://projetorgm.com.br/map/","icon home ","Início","","") +"</span>"; 
 var LinksAlvo = "";
 var MapControlsInner = "";     //HTML que vai dentro do LegendControl ControlesDoMapa
 var MapaEmbutido = MapIsEmb();
@@ -39,8 +40,8 @@ var MapBaseLayersSelect = "<form id='rgm-map-controles' method='post' >"+MapAddL
 			+"<option value='lIBR' >IBGE Rural</option>"
 			+"<option value='lIBU' >IBGE Urbano</option>"
 		+"</select>"+ MapShareButton
-		+"</select>"+ MapRecentButton
-		+"<div id='map-controls-group'></div>"
+		+ MapRecentButton + MapHomeButton
+		+"<div id='map-controls-group'></div>"		
 		+"<input id='share-id' name='share-id' type='hidden' value='0'>"
 		//+"<input id='share-b'  name='share-b' type='hidden' value=''>"
 		+"<input id='share-o'  name='share-o' type='hidden' value=''>"
@@ -309,9 +310,9 @@ $(".rgm-map-share-button").click(function(e) {
 
 	var TestID = $("#share-id").val();
 	
-	//Se já tiver mapa cadastrado, nada a fazer. ID = string
+	//Se já tiver mapa cadastrado, nada a fazer. ID = string. Mas se for zero...
 	if ( TestID == '0' ) {
-		Tit = prompt("Dê um nome para este mapa", "Mapa sem título");
+		Tit = prompt("Algum nome para este mapa? (Cancelar = Não)", "sem nome");
 
 		var Cnt = map.getCenter();
 		var Zoom = map.getZoom();
@@ -320,27 +321,27 @@ $(".rgm-map-share-button").click(function(e) {
 		var XYZ = Zoom + "/" + Lat + "/" + Lon;
 		var O  = ""; 
 	
-		$("#share-xyz").val(XYZ);	
+		$("#share-xyz").val(XYZ);
+		//Se não tiver título, considera que apenas quer o link do mapa	
 		if (Tit != null && Tit != "") { 
 				Dsc = prompt("Quer deixar alguma descrição sobre esse mapa?", "");		
 				$("#share-tit").val(Tit);		
 				if (Dsc != null) { $("#share-dsc").val(Dsc);	}
-			
-				if (map.hasLayer( olMPLL )) {O = "MPLL";}	
-				if (map.hasLayer( olNASC )) {
-					if( O != "" && O != null  ) {	O = O + ";";} //Adiciona um separador
-					O = O + "NASC";
-				}	
-				$("#share-o").val(O);	
-				
-				var Total = RawOverlaysMB.length;
-				var MBLayers = "";
-				for ( Cont = 0; Cont < Total; Cont++ ) {
-					MBLayers = MBLayers + RawOverlaysMB[Cont] + ";"; //
-				}
-				$("#share-mb").val(MBLayers );
 		}else {		
-			Submeter = false;
+			//Submeter = false;
+			if (map.hasLayer( olMPLL )) {O = "MPLL";}	
+			if (map.hasLayer( olNASC )) {
+				if( O != "" && O != null  ) {	O = O + ";";} //Adiciona um separador
+				O = O + "NASC";
+			}	
+			$("#share-o").val(O);	
+			
+			var Total = RawOverlaysMB.length;
+			var MBLayers = "";
+			for ( Cont = 0; Cont < Total; Cont++ ) {
+				MBLayers = MBLayers + RawOverlaysMB[Cont] + ";"; //
+			}
+			$("#share-mb").val(MBLayers );
 		}		
 	}	
 	
