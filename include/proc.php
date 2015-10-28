@@ -30,7 +30,7 @@ function IsValidLayer($Test){
 function IsValidOverlay($Test){
 	$IsLayer = FALSE;
 	$Test = $Test . ",";
-	$Layers = "Mapillary,MPLL,";
+	$Layers = "Mapillary,MPLL,NASC,";
 	if( StrPosicao($Test,$Layers) > 0 ) {
 		$IsLayer = TRUE;
 	} 

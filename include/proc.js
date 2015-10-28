@@ -312,7 +312,7 @@ $(".rgm-map-share-button").click(function(e) {
 	
 	//Se já tiver mapa cadastrado, nada a fazer. ID = string. Mas se for zero...
 	if ( TestID == '0' ) {
-		Tit = prompt("Algum nome para este mapa? (Cancelar = Não)", "sem nome");
+		Tit = prompt("Salvar este mapa ou apenas link?\nDê um nome para salvar.\nCancelar / sem nome para apenas link.", "sem nome");
 
 		var Cnt = map.getCenter();
 		var Zoom = map.getZoom();
@@ -321,27 +321,30 @@ $(".rgm-map-share-button").click(function(e) {
 		var XYZ = Zoom + "/" + Lat + "/" + Lon;
 		var O  = ""; 
 	
+		//O salvamento temporário das overlays predefinidas é incondicional
 		$("#share-xyz").val(XYZ);
+		if (map.hasLayer( olMPLL )) {O = "MPLL";}	
+		if (map.hasLayer( olNASC )) {
+			if( O != "" && O != null  ) {	O = O + ";";} //Adiciona um separador
+			O = O + "NASC";
+		}	
+		$("#share-o").val(O);	
+		
+		//Mas o salvamento das overlays customizadas (Mapbox) é condicional ao nome do mapa
 		//Se não tiver título, considera que apenas quer o link do mapa	
-		if (Tit != null && Tit != "") { 
+		if (Tit != null && Tit != "" && Tit != "sem nome") { 
 				Dsc = prompt("Quer deixar alguma descrição sobre esse mapa?", "");		
 				$("#share-tit").val(Tit);		
 				if (Dsc != null) { $("#share-dsc").val(Dsc);	}
+				var Total = RawOverlaysMB.length;
+				var MBLayers = "";
+				for ( Cont = 0; Cont < Total; Cont++ ) {
+					MBLayers = MBLayers + RawOverlaysMB[Cont] + ";"; //
+				}
+				$("#share-mb").val(MBLayers );
 		}else {		
 			//Submeter = false;
-			if (map.hasLayer( olMPLL )) {O = "MPLL";}	
-			if (map.hasLayer( olNASC )) {
-				if( O != "" && O != null  ) {	O = O + ";";} //Adiciona um separador
-				O = O + "NASC";
-			}	
-			$("#share-o").val(O);	
-			
-			var Total = RawOverlaysMB.length;
-			var MBLayers = "";
-			for ( Cont = 0; Cont < Total; Cont++ ) {
-				MBLayers = MBLayers + RawOverlaysMB[Cont] + ";"; //
-			}
-			$("#share-mb").val(MBLayers );
+			//			
 		}		
 	}	
 	
