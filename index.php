@@ -162,7 +162,7 @@ elseif (filter_has_var(INPUT_GET,'id')) {
    ?>
 	<link href="css/geral.css" rel="stylesheet" type="text/css"/>	
 	<link href="css/map.css" rel="stylesheet" type="text/css"/>	
-	<link rel="shortcut icon" href="imagens/favicon.png" type="image/png"/>
+	<link rel="shortcut icon" href="imagens/favicon.ico" type="image/x-icon"/>
 	<!-- Mapbox  -->
 	<script src='https://api.tiles.mapbox.com/mapbox.js/v2.2.1/mapbox.js'></script>
 	<link href='https://api.tiles.mapbox.com/mapbox.js/v2.2.1/mapbox.css' rel='stylesheet' />
@@ -200,10 +200,9 @@ elseif (filter_has_var(INPUT_GET,'id')) {
 	<script src="include/funcoes.js"></script>
 
 </head>
-<body>	
+<body class="fill-dark">	
 <?
-if(isset($MapasRecentes)){
-Linha("<!--entrou no comando-->");	
+if(isset($MapasRecentes)){	
 	$Ini = 0 + (cMapasPorPagina * ($MapasRecentes - 1));
 	$Fin = $Ini + cMapasPorPagina;	
 	MostrarMapasRecentes($Ini,$Fin);		

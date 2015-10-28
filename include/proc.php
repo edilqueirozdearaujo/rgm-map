@@ -113,7 +113,7 @@ function MostrarOverlays($SetOverlay) {
 
 function MostrarMapasRecentes($From,$Limit) {
 	function Botao($URL,$Conteudo) {
-		Linha("				<a class='button fill-green icon osm space space-bottom1' href='$URL'>$Conteudo</a>");
+		Linha(" <p class='round cleafix fill-lighten1 col3 row2 margin0'><a class='fr button fill-green icon osm' href='$URL'>Abrir</a> <span class='pad0'>$Conteudo</span> </p> ");
 	
 	}	
 	function BotaoNav($Conteudo,$Icon) {
@@ -121,7 +121,7 @@ function MostrarMapasRecentes($From,$Limit) {
 		if( Vazio($Icon) ) {
 			$ModoIcon = '';		
 		}
-		Linha("				<a class='button $ModoIcon $Icon dot botao-paginador' href='#'>$Conteudo</a>");	
+		Linha("<a class='button $ModoIcon $Icon dot botao-paginador' href='#'>$Conteudo</a>");	
 	}	
 
 	$BaseURL = cURLBase;
@@ -131,8 +131,7 @@ function MostrarMapasRecentes($From,$Limit) {
 	Linha("		<h3 class='inline fancy' >Galeria dos mapas que já foram feitos</h3>");
 	Linha("</div>");
 	
-	Linha("<div class='pad2 dark center'>");
-	Linha("<hr>");
+	Linha("<div class='pad1 dark center'>");
 
 	$Res = DBServerConnect();
 	if( DBIsConnected($Res)) {
@@ -196,16 +195,17 @@ function MostrarOverlaysMB($SetOverlay) {
 
 
 
-function Footer() {
-   Linha("	<div class='footer'>");
-   Linha("		<p class='alinhar-centro'>");
-   Linha("			" . cSiteRGM . " | <img class='alinhar-vertical' src='imagens/icons/git-w.png' /> " . GetMsg('GetSource'));
-	Linha("			 | <a href='http://projetorgm.com.br/rede-de-projetos/' title='Conheça a Rede de Projetos'><img class='alinhar-vertical' width='32px' src='imagens/creditos/rede-de-projetos.png'  alt=' Rede de Projetos ' /> Uma iniciativa fundada na Rede de Projetos</a>");
-   Linha("		</p>");
-   Linha("	</div>");
-   Linha(" ");									
-}
 
+function Footer(){
+/*
+	Linha("<div class='prose clearfix col12 center dark'>");
+   Linha(	cSiteRGM );
+	Linha(" 	<a class='pad1' href='".GetMsg('GetSource'))."'><span class='icon big github'>Source</span></a>");
+	Linha("	<a href='http://projetorgm.com.br/rede-de-projetos/' title='Conheça a Rede de Projetos'><img src='imagens/creditos/rede-de-projetos.png'  alt=' Rede de Projetos ' /> Uma iniciativa fundada na Rede de Projetos</a>");
+	Linha(" 	<a class='pad1' href='https://www.mapbox.com/base'><span class='icon big mapbox'>Mapbox style</span></a>");
+	Linha("</div>");
+*/	
+}
 
 
 //SHARE OPTIONS ------------------------------------------------------------------------------------------ 

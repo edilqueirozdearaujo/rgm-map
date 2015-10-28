@@ -1,9 +1,11 @@
 //initialization ************************************************************
-var LinkPrint  = HrefFromURLPlus("#","icon printer","Imprimir","","");
-var MapAddLButton  = "<span >" + HrefFromURLPlus("#","icon plus rgm-map-addl-button","Adicionar mapas","","") + "</span>";
-var MapShareButton = "<span >"+ HrefFromURLPlus("#","icon share rgm-map-share-button","Compartilhe","","") +"</span>"; 
-var MapRecentButton = "<span>"+ HrefFromURLPlus("http://projetorgm.com.br/map/?pg=1","icon star rgm-map-recent-button","Mapas recentes","","") +"</span>"; 
-var MapHomeButton   = "<span>"+ HrefFromURLPlus("http://projetorgm.com.br/map/","icon home ","Início","","") +"</span>"; 
+//var LinkPrint  = HrefFromURLPlus("#","icon printer","Imprimir","","");
+var MapPrintButton  = HrefFromURLPlus("#","button short icon space-bottom1 print rgm-map-print-button","Imprimir","","") + " ";
+var MapHelpButton   = HrefFromURLPlus("#","button short icon space-bottom1 help","Ajuda","","") + " ";
+var MapAddLButton   = HrefFromURLPlus("#","button short icon space-bottom1 plus fill-green rgm-map-addl-button","Adicionar mapas","","") + " ";
+var MapShareButton  = HrefFromURLPlus("#","button short icon share fill-green rgm-map-share-button","Compartilhe","","") +" "; 
+var MapRecentButton = HrefFromURLPlus("http://projetorgm.com.br/map/?pg=1","button short icon star fill-green rgm-map-recent-button","Mapas recentes","","") +" "; 
+var MapHomeButton   = HrefFromURLPlus("http://projetorgm.com.br/map/","button short icon home space-bottom1 fill-green","Início","","") +" "; 
 var LinksAlvo = "";
 var MapControlsInner = "";     //HTML que vai dentro do LegendControl ControlesDoMapa
 var MapaEmbutido = MapIsEmb();
@@ -16,8 +18,10 @@ if ( MapaEmbutido ) {
   MapRecentButton = "";       
 }
 
-var MapBaseLayersSelect = "<form id='rgm-map-controles' method='post' >"+MapAddLButton+"<span class='icon layers'></span>"
-		+"<select id='map-select-layer' name='share-b' >"
+var MapBaseLayersSelect = "<form id='rgm-map-controles' method='post' >"
+		+"<span class='dark'>"+MapAddLButton+"</span>"
+		+"<span class='icon layers'></span>"
+		+"<select id='map-select-layer' name='share-b'>"
 			+"<option value='lMNK' >OpenStreetMap</option>"  
 			+"<option value='lMKG' >OSM Tons de cinza</option>"
 			+"<option value='lMBL' >Mapbox Light</option>"  
@@ -39,9 +43,11 @@ var MapBaseLayersSelect = "<form id='rgm-map-controles' method='post' >"+MapAddL
 			+"<option value='lSTT' >Stamen Toner Dark</option>"
 			+"<option value='lIBR' >IBGE Rural</option>"
 			+"<option value='lIBU' >IBGE Urbano</option>"
-		+"</select>"+ MapShareButton
-		+ MapRecentButton + MapHomeButton
-		+"<div id='map-controls-group'></div>"		
+		+"</select> "
+		+"<span class='dark'>"
+		+ MapShareButton + MapRecentButton + MapHomeButton
+		+"</span> "				
+		+"<span class='dark map-controls-group space-bottom1'></span>"		
 		+"<input id='share-id' name='share-id' type='hidden' value='0'>"
 		//+"<input id='share-b'  name='share-b' type='hidden' value=''>"
 		+"<input id='share-o'  name='share-o' type='hidden' value=''>"
@@ -90,7 +96,7 @@ function ChangeLayer(Opcao) {
 
 
 function MakeMapControls(Links) {
-	$("#map-controls-group").html(Links);
+	$(".map-controls-group").html(Links);
 }
 
 function AtualizarControlesDoMapa() {
@@ -107,16 +113,16 @@ function AtualizarControlesDoMapa() {
 	PreLinkOSMd      = GetLinkOSMd(Lat,Lon);
 	PreLinkLast90    = GetLinkLast90Edits(Lat,Lon);
 	
-	LinkOSMR      = HrefFromURLPlus(PreLinkOSMR,"icon l-r-arrow","Como chegar até aqui","",LinksAlvo);
-	LinkMapillary = HrefFromURLPlus(PreLinkMapillary,"icon street","Fotos e streetview","",LinksAlvo);
-	LinkF4Map  = HrefFromURLPlus(PreLinkF4Map,"icon mt","Veja em 3D","",LinksAlvo);
-	LinkEcoMap = HrefFromURLPlus(PreLinkEcoMap,"icon landuse","Mapa ecológico","",LinksAlvo);
-	LinkOSMe   = HrefFromURLPlus(PreLinkOSMe,"icon pencil","Edite este mapa","",LinksAlvo);
-	LinkLast90 = HrefFromURLPlus(PreLinkLast90,"icon history","Edições nos últimos 90 dias","",LinksAlvo);
-	LinkOSMd   = HrefFromURLPlus(PreLinkOSMd,"icon inspect","Dados do mapa","",LinksAlvo);
+	LinkOSMR      = HrefFromURLPlus(PreLinkOSMR,     "button short icon l-r-arrow","Como chegar até aqui","",LinksAlvo);
+	LinkMapillary = HrefFromURLPlus(PreLinkMapillary,"button short icon street","Fotos e streetview","",LinksAlvo);
+	LinkF4Map     = HrefFromURLPlus(PreLinkF4Map,    "button short icon mt","Veja em 3D","",LinksAlvo);
+	LinkEcoMap    = HrefFromURLPlus(PreLinkEcoMap,   "button short icon landuse","Mapa ecológico","",LinksAlvo);
+	LinkOSMe      = HrefFromURLPlus(PreLinkOSMe,     "button short icon pencil","Edite este mapa","",LinksAlvo);
+	LinkLast90    = HrefFromURLPlus(PreLinkLast90,   "button short icon history","Edições nos últimos 90 dias","",LinksAlvo);
+	LinkOSMd      = HrefFromURLPlus(PreLinkOSMd,     "button short icon inspect","Dados do mapa","",LinksAlvo);
 
 	PreLinkNote      = GetLinkNote(Lat,Lon); 
-	LinkNote   = HrefFromURLPlus(PreLinkNote,"icon contact","Localizou um erro ou algo faltando? Informe pra gente :)","",LinksAlvo);
+	LinkNote   = HrefFromURLPlus(PreLinkNote,"button short icon tooltip","Localizou um erro ou algo faltando? Informe pra gente :)","",LinksAlvo);
 
 	
 	LinksLegenda = LinkOSMR + " " + LinkMapillary + " " + LinkF4Map + " " + LinkEcoMap + " " + LinkOSMe
@@ -355,8 +361,8 @@ $(".rgm-map-share-button").click(function(e) {
 //Função para adicionar mapas criados com o editor Mapbox! :)
 $(".rgm-map-addl-button").click(function(e) {
 	e.preventDefault();
-	var Link  = "Editor Mapbox: http://mapbox.com/editor/";
-	var Mapa = prompt("Adicione seus mapas criados com o " + Link + '! Informe o ID e apelido separados por vírgula', "projetorgm.n11d3kl9,Unidades");
+	var Link  = "\nEditor Mapbox: http://mapbox.com/editor/";
+	var Mapa = prompt("Adicione seus mapas criados com o " + Link + '\nInforme o ID e apelido separados por vírgula', "projetorgm.n11d3kl9,Unidades");
 	
 	if ( Mapa != '' && Mapa != null ) {
 		if ( AddMBLayerInTheMap(Mapa) ) {				 
