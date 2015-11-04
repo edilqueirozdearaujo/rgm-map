@@ -195,7 +195,6 @@ elseif (filter_has_var(INPUT_GET,'id')) {
 	<link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' />
 
 	<script src="include/jquery.min.js" ></script>
-	<script src="include/printElement.js" ></script>
 	<script src='include/providers.js'></script>
 	<script src="include/funcoes.js"></script>
 
