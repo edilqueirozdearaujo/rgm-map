@@ -159,8 +159,7 @@ elseif (filter_has_var(INPUT_GET,'id')) {
        }else{ 
            Linha("	<title>".GetMsg('SiteTitle')." </title>");
        }     
-   ?>
-	<link href="css/geral.css" rel="stylesheet" type="text/css"/>	
+   ?>	
 	<link href="css/map.css" rel="stylesheet" type="text/css"/>	
 	<link rel="shortcut icon" href="imagens/favicon.ico" type="image/x-icon"/>
 	<!-- Mapbox  -->
@@ -196,11 +195,20 @@ elseif (filter_has_var(INPUT_GET,'id')) {
 	<link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' />
 
 	<script src="include/jquery.min.js" ></script>
+	<script src="include/printElement.js" ></script>
 	<script src='include/providers.js'></script>
 	<script src="include/funcoes.js"></script>
 
 </head>
 <body class="fill-dark">	
+<div id='print-options' class='col12 limiter pad2 center dark'>
+	<form id='map-page-form' method='post' >
+		<a href='#' class='button icon big printer map-btn-print' >Imprimir</a>
+		<a href='#' class='button icon big close fill-red margin2 map-btn-print-cancel' >Cancelar</a>
+		<span class="caption pad0">Tamanho recomendado para impressão: A4</span>
+		<input id='map-page-form-submit' name='map-page-form-submit' type='hidden' value='0'>	
+	</form>
+</div>
 <?
 if(isset($MapasRecentes)){	
 	$Ini = 0 + (cMapasPorPagina * ($MapasRecentes - 1));
@@ -212,14 +220,16 @@ elseif(isset($CompartilharMapa)){
 }
 else{
  	Linha("<div id='geocode-selector'></div>");
- 	Linha("<div id='mapdiv'></div>");
+ 	Linha("<div id='print-area' class='page-A4' >");
+ 	Linha("		<div id='map' class='map-print' ></div>");
+ 	Linha("</div>");
 	Linha("<script>");		
 	Linha("		var HeatLayer = L.heatLayer([], { minZoom: 5, maxZoom: 17 });");		
 	Linha("		var ClusterLayer = new L.MarkerClusterGroup();");		
 	
 	Linha("		var RawOverlaysMB = []; //Overlays como dados brutos");		
 	Linha("		var OverlaysMB = []; //Feature layers");		
-	Linha("		var map = L.mapbox.map('mapdiv'); //Cria o mapa");
+	Linha("		var map = L.mapbox.map('map'); //Cria o mapa");
 //	Linha("		map.MaxZoom = 19;");
 //	Linha("		map._layersMaxZoom=19;");
 	Linha("		map.options.maxZoom = 19;");
@@ -262,6 +272,29 @@ else{
 }	
 		
 ?>	
+<script>
+	ControlGeocoder.removeFrom(map);
+	LocateControl.removeFrom(map);
+	ControlesDoMapa.removeFrom(map);
+	ControlLayers.removeFrom(map);
+	map.attributionControl.addAttribution("RGM Map");
+	//ControlesDoMapa.removeLegend(MapBaseLayersSelect);
+	//ControlesDoMapa.addLegend(SelectLayersList);
+	ModoImpressao = true;
+	
+	
+	$(".map-btn-print").click(function(e){
+    		e.preventDefault();
+//
+//			PrintDiv("print-area");
+//    		return false;
+    		
+//alert('HELLO!!');    		
+	});
+	$(".map-btn-print-cancel").click(function(e) {						
+			$("#map-page-form").submit();
+	}) 
+</script>
 	
 	
 </body>

@@ -1,7 +1,4 @@
-#mapdiv{
-   height: 100%;
-   width: 100%;
-}
+body {margin:0; padding:0;}
 
 
 .leaflet-control-locate {
@@ -14,19 +11,41 @@
 .leaflet-control-locate.active a {
   background-position:-33px -2px;
   }
+ 
+ 
+/* --- Map, normal mode ------ */
+.map-normal { position:absolute; top:0; bottom:0; width:100%;} 
+/* --- Print mode ------ */
+.map-print {
+     width: 19cm;
+     height: 27cm;
+     margin: 1.5cm auto;
+     background: #ffffff;
+ }
 
-
-
-#select-baselayers, #map-legend-title, #map-legend-btn{
-	display: inline-table;
-	vertical-align: middle;
-}
-
-
-.map-notes-icon{
-	font-size: 200%;
-	color: #43B043;
-	display: inline-table;
-	padding-right: 3px;
-	font-weight: bolder; 
-}
+ .page-A4 {
+     width: 21cm;
+     height: 29.7cm;     
+     margin: auto;
+     border: solid 0.6mm #D3D3D3;
+     border-radius: 5px;
+     background: #ffffff;
+     box-shadow: 0 0 1mm rgba(0, 0, 0, 0.1);
+ }
+ 
+ @page {
+     size: A4;
+     margin: 0;
+ }
+ @media print {
+     .page-A4 {
+         border: initial;
+         border-radius: initial;
+         width: initial;
+         height: initial;
+         min-height: initial;
+         box-shadow: initial;
+         background: initial;
+         page-break-after: always;
+     }
+ }

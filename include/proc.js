@@ -1,4 +1,5 @@
 //initialization ************************************************************
+var ModoImpressao = false;
 //var LinkPrint  = HrefFromURLPlus("#","icon printer","Imprimir","","");
 var MapPrintButton  = HrefFromURLPlus("#","button short icon space-bottom1 print rgm-map-print-button","Imprimir","","") + " ";
 var MapHelpButton   = HrefFromURLPlus("#","button short icon space-bottom1 help","Ajuda","","") + " ";
@@ -18,10 +19,8 @@ if ( MapaEmbutido ) {
   MapRecentButton = "";       
 }
 
-var MapBaseLayersSelect = "<form id='rgm-map-controles' method='post' >"
-		+"<span class='dark'>"+MapAddLButton+"</span>"
-		+"<span class='icon layers'></span>"
-		+"<select id='map-select-layer' name='share-b'>"
+var SelectLayersList = "<span class='icon layers'></span>" 
+			+"<select id='map-select-layer' name='share-b'>"
 			+"<option value='lMNK' >OpenStreetMap</option>"  
 			+"<option value='lMKG' >OSM Tons de cinza</option>"
 			+"<option value='lMBL' >Mapbox Light</option>"  
@@ -44,6 +43,12 @@ var MapBaseLayersSelect = "<form id='rgm-map-controles' method='post' >"
 			+"<option value='lIBR' >IBGE Rural</option>"
 			+"<option value='lIBU' >IBGE Urbano</option>"
 		+"</select> "
+
+
+ 
+var MapBaseLayersSelect = "<form id='rgm-map-controles' method='post' >"
+		+"<span class='dark'>"+MapAddLButton+"</span>"
+		+ SelectLayersList
 		+"<span class='dark'>"
 		+ MapShareButton + MapRecentButton + MapHomeButton
 		+"</span> "				
@@ -60,7 +65,7 @@ var MapBaseLayersSelect = "<form id='rgm-map-controles' method='post' >"
 
 var ControlesDoMapa = new L.mapbox.LegendControl({position: 'topright'});
 ControlesDoMapa.addTo(map);
-ControlesDoMapa.addLegend(MapBaseLayersSelect); //A seleção das camadas do mapa não devem ser mudadas ao mover o mapa
+ControlesDoMapa.addLegend(MapBaseLayersSelect); //A seleção das camadas do mapa não deve ser mudadas ao mover o mapa
 
 
 function ChangeLayer(Opcao) {
@@ -100,39 +105,40 @@ function MakeMapControls(Links) {
 }
 
 function AtualizarControlesDoMapa() {
-	//pega coordenadas
-	var Cnt = map.getCenter();
-	var Lat = Cnt.lat;
-	var Lon = Cnt.lng;
+	if( !ModoImpressao) {
+		//pega coordenadas
+		var Cnt = map.getCenter();
+		var Lat = Cnt.lat;
+		var Lon = Cnt.lng;
+		
+		PreLinkOSMR      = GetLinkOSMR(Lat,Lon); 
+		PreLinkMapillary = GetLinkMapillary(Lat,Lon);
+		PreLinkF4Map     = GetLinkF4Map(Lat,Lon);
+		PreLinkEcoMap    = GetLinkEcoMap(Lat,Lon);
+		PreLinkOSMe      = GetLinkOSMe(Lat,Lon);
+		PreLinkOSMd      = GetLinkOSMd(Lat,Lon);
+		PreLinkLast90    = GetLinkLast90Edits(Lat,Lon);
+		
+		LinkOSMR      = HrefFromURLPlus(PreLinkOSMR,     "button short icon l-r-arrow","Como chegar até aqui","",LinksAlvo);
+		LinkMapillary = HrefFromURLPlus(PreLinkMapillary,"button short icon street","Fotos e streetview","",LinksAlvo);
+		LinkF4Map     = HrefFromURLPlus(PreLinkF4Map,    "button short icon mt","Veja em 3D","",LinksAlvo);
+		LinkEcoMap    = HrefFromURLPlus(PreLinkEcoMap,   "button short icon landuse","Mapa ecológico","",LinksAlvo);
+		LinkOSMe      = HrefFromURLPlus(PreLinkOSMe,     "button short icon pencil","Edite este mapa","",LinksAlvo);
+		LinkLast90    = HrefFromURLPlus(PreLinkLast90,   "button short icon history","Edições nos últimos 90 dias","",LinksAlvo);
+		LinkOSMd      = HrefFromURLPlus(PreLinkOSMd,     "button short icon inspect","Dados do mapa","",LinksAlvo);
 	
-	PreLinkOSMR      = GetLinkOSMR(Lat,Lon); 
-	PreLinkMapillary = GetLinkMapillary(Lat,Lon);
-	PreLinkF4Map     = GetLinkF4Map(Lat,Lon);
-	PreLinkEcoMap    = GetLinkEcoMap(Lat,Lon);
-	PreLinkOSMe      = GetLinkOSMe(Lat,Lon);
-	PreLinkOSMd      = GetLinkOSMd(Lat,Lon);
-	PreLinkLast90    = GetLinkLast90Edits(Lat,Lon);
+		PreLinkNote      = GetLinkNote(Lat,Lon); 
+		LinkNote   = HrefFromURLPlus(PreLinkNote,"button short icon tooltip","Localizou um erro ou algo faltando? Informe pra gente :)","",LinksAlvo);
 	
-	LinkOSMR      = HrefFromURLPlus(PreLinkOSMR,     "button short icon l-r-arrow","Como chegar até aqui","",LinksAlvo);
-	LinkMapillary = HrefFromURLPlus(PreLinkMapillary,"button short icon street","Fotos e streetview","",LinksAlvo);
-	LinkF4Map     = HrefFromURLPlus(PreLinkF4Map,    "button short icon mt","Veja em 3D","",LinksAlvo);
-	LinkEcoMap    = HrefFromURLPlus(PreLinkEcoMap,   "button short icon landuse","Mapa ecológico","",LinksAlvo);
-	LinkOSMe      = HrefFromURLPlus(PreLinkOSMe,     "button short icon pencil","Edite este mapa","",LinksAlvo);
-	LinkLast90    = HrefFromURLPlus(PreLinkLast90,   "button short icon history","Edições nos últimos 90 dias","",LinksAlvo);
-	LinkOSMd      = HrefFromURLPlus(PreLinkOSMd,     "button short icon inspect","Dados do mapa","",LinksAlvo);
-
-	PreLinkNote      = GetLinkNote(Lat,Lon); 
-	LinkNote   = HrefFromURLPlus(PreLinkNote,"button short icon tooltip","Localizou um erro ou algo faltando? Informe pra gente :)","",LinksAlvo);
-
-	
-	LinksLegenda = LinkOSMR + " " + LinkMapillary + " " + LinkF4Map + " " + LinkEcoMap + " " + LinkOSMe
-					 + " " + LinkLast90 + " " + LinkOSMd + " "  + LinkNote; // + " " + LinkPrint;
-	
-	if ( !MapaEmbutido ) {
-		LinksLegenda = LinksLegenda; 
-	}
-	
-	MakeMapControls(LinksLegenda);
+		
+		LinksLegenda = LinkOSMR + " " + LinkMapillary + " " + LinkF4Map + " " + LinkEcoMap + " " + LinkOSMe
+						 + " " + LinkLast90 + " " + LinkOSMd + " "  + LinkNote; // + " " + LinkPrint;
+		
+		if ( !MapaEmbutido ) {
+			LinksLegenda = LinksLegenda; 
+		}	
+		MakeMapControls(LinksLegenda);
+	}	
 }
 
 
@@ -248,7 +254,8 @@ ControlLayers.addOverlay(olMPLL, 'Fotos do Mapillary');
 ControlLayers.addOverlay(olNASC, 'Nascentes');								
 ControlLayers.addTo(map);
 
-L.control.locate().addTo(map);
+var LocateControl = L.control.locate();
+LocateControl.addTo(map);
 		
 var ControlGeocoder = new L.Control.geocoder({
 		position:    'topleft',
@@ -286,10 +293,7 @@ map.on('overlayremove', function(e) {
 AtualizarControlesDoMapa();			
 map.on('moveend', function(e) {
 	AtualizarControlesDoMapa();	
-
-
-		olMPLL.loadURL(GetAPI_ENDPOINT()); //BETA
-					
+	olMPLL.loadURL(GetAPI_ENDPOINT()); //BETA					
 });	
 
 /*DEPRECATED
